@@ -1,4 +1,4 @@
-import { personalProjects, profile, stack, workHistory, workflowSteps, workProjects } from "./data.js";
+import { personalProjects, profile, skillModes, stack, workHistory, workflowSteps, workProjects } from "./data.js";
 
 const page = process.argv[2];
 
@@ -161,19 +161,47 @@ function shell(meta, content) {
 
 function workPage() {
   return `
-        <section class="detail-grid detail-grid-single">
+        <section class="work-timeline-section">
+          <div class="work-timeline-rail" aria-hidden="true"></div>
           ${workHistory
             .map(
-              (job) => `
-          <article class="detail-card">
-            <div class="detail-card-head"><p class="date">${job.period}</p><h2>${job.title}</h2><span>${job.company}</span></div>
-            <p>${job.summary}</p>
-            <ul class="detail-list">${job.details.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-            <p class="tech">${job.stack}</p>
+              (job, index) => `
+          <article class="work-timeline-item${index === 0 ? " current" : ""}">
+            <div class="work-date"><span>${job.period}</span></div>
+            <div class="work-body">
+              <p class="path-title">/${job.company.toLowerCase().replaceAll(" ", "-").replaceAll("&", "and")}</p>
+              <h2>${job.title}</h2>
+              <p>${job.summary}</p>
+              <ul class="detail-list">${job.details.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+              <p class="tech">${job.stack}</p>
+            </div>
           </article>`,
             )
             .join("\n")}
         </section>`;
+}
+
+function projectVisual(project, index) {
+  return `<div class="project-visual" aria-label="Image placeholder for ${escapeHtml(project.path)}">
+              <div class="visual-topline"><span>${escapeHtml(project.imageLabel ?? "project-image.png")}</span><span>${String(index + 1).padStart(2, "0")}</span></div>
+              <div class="visual-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <p>Drop project screenshot here</p>
+            </div>`;
+}
+
+function projectRow(project, index, type = "work") {
+  const text = `
+            <div class="project-row-copy">
+              <div class="detail-card-head"><p class="path-title">${project.path}</p>${project.label ? `<span>${project.label}</span>` : ""}</div>
+              <p>${project.summary}</p>
+              <ul class="detail-list">${project.details.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+              <p class="tech">${project.stack}</p>
+            </div>`;
+  const visual = projectVisual(project, index);
+  return `
+          <article class="project-row ${index % 2 === 1 ? "image-left" : "image-right"} ${type}-project-row">
+            ${index % 2 === 1 ? `${visual}${text}` : `${text}${visual}`}
+          </article>`;
 }
 
 function projectCard(project) {
@@ -198,38 +226,54 @@ function personalProjectCard(project) {
 
 function projectsPage() {
   return `
-        <section class="detail-section">
+        <section class="project-rows-section">
           <h2 class="section-label">WORK PROJECTS</h2>
-          <div class="detail-grid">${workProjects.map(projectCard).join("\n")}</div>
+          <div class="project-row-list">${workProjects.map((project, index) => projectRow(project, index, "work")).join("\n")}</div>
         </section>
-        <section class="detail-section">
+        <section class="project-rows-section">
           <h2 class="section-label">PERSONAL PROJECTS</h2>
-          <div class="detail-grid">${personalProjects.map(personalProjectCard).join("\n")}</div>
+          <div class="project-row-list">${personalProjects.map((project, index) => projectRow(project, index, "personal")).join("\n")}</div>
         </section>`;
 }
 
 function workflowPage() {
   return `
-        <section class="detail-grid">
-          ${workflowSteps
-            .map(
-              (step, index) => `
-          <article class="detail-card workflow-detail-card">
-            <p class="date">0${index + 1}</p>
-            <h2>${step.title}</h2>
-            <p>${step.body}</p>
-          </article>`,
-            )
-            .join("\n")}
+        <section class="workflow-map-section">
+          <div class="workflow-core">
+            <p class="path-title">/global-agent-skills</p>
+            <h2>Async skill router</h2>
+            <p>Different tasks get routed to different skills instead of forcing one generic AI workflow.</p>
+          </div>
+          <div class="skill-node-grid">
+            ${skillModes
+              .map(
+                (skill, index) => `
+            <article class="skill-node node-${index + 1}">
+              <p class="date">${skill.id}</p>
+              <h3>${skill.title}</h3>
+              <dl>
+                <div><dt>Mode</dt><dd>${skill.mode}</dd></div>
+                <div><dt>Input</dt><dd>${skill.input}</dd></div>
+                <div><dt>Output</dt><dd>${skill.output}</dd></div>
+              </dl>
+            </article>`,
+              )
+              .join("\n")}
+          </div>
         </section>
-        <section class="detail-section">
-          <div class="detail-card wide-note">
-            <p class="path-title">/workflow/operating-rules.txt</p>
-            <ul class="detail-list">
-              <li>Prefer clear repo instructions, acceptance criteria, and small verifiable changes.</li>
-              <li>Use AI for exploration, drafting, refactoring support, screenshot comparison, and review pressure.</li>
-              <li>Do not trust generated code without running checks and validating the product behavior.</li>
-            </ul>
+        <section class="async-lane-section">
+          <h2 class="section-label">ASYNC OPERATING LOOP</h2>
+          <div class="async-lanes">
+            ${workflowSteps
+              .map(
+                (step, index) => `
+            <div class="async-lane">
+              <span>0${index + 1}</span>
+              <h3>${step.title}</h3>
+              <p>${step.body}</p>
+            </div>`,
+              )
+              .join("\n")}
           </div>
         </section>`;
 }

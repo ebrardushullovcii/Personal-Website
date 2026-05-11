@@ -66,46 +66,98 @@
           <p>A practical operating loop for turning unclear work into shipped software: clarify, scaffold, code, review, test, document, and ship.</p>
         </section>
         
-        <section class="detail-grid">
-          
-          <article class="detail-card workflow-detail-card">
-            <p class="date">01</p>
-            <h2>Capture & Clarify</h2>
-            <p>Turn rough notes, screenshots, and requirements into explicit acceptance criteria before building.</p>
-          </article>
+        <section class="workflow-map-section">
+          <div class="workflow-core">
+            <p class="path-title">/global-agent-skills</p>
+            <h2>Async skill router</h2>
+            <p>Different tasks get routed to different skills instead of forcing one generic AI workflow.</p>
+          </div>
+          <div class="skill-node-grid">
+            
+            <article class="skill-node node-1">
+              <p class="date">frontend-design</p>
+              <h3>Frontend Design</h3>
+              <dl>
+                <div><dt>Mode</dt><dd>visual implementation</dd></div>
+                <div><dt>Input</dt><dd>references, screenshots, product taste</dd></div>
+                <div><dt>Output</dt><dd>polished UI, responsive passes, visual diffs</dd></div>
+              </dl>
+            </article>
 
-          <article class="detail-card workflow-detail-card">
-            <p class="date">02</p>
-            <h2>Plan & Scaffold</h2>
-            <p>Break down implementation slices, inspect existing patterns, and scaffold the smallest useful structure.</p>
-          </article>
+            <article class="skill-node node-2">
+              <p class="date">agent-browser</p>
+              <h3>Agent Browser</h3>
+              <dl>
+                <div><dt>Mode</dt><dd>browser verification</dd></div>
+                <div><dt>Input</dt><dd>local app, flows, screenshots</dd></div>
+                <div><dt>Output</dt><dd>snapshots, screenshots, interaction evidence</dd></div>
+              </dl>
+            </article>
 
-          <article class="detail-card workflow-detail-card">
-            <p class="date">03</p>
-            <h2>Code with AI</h2>
-            <p>Use agents as accelerators for exploration, implementation, and review while keeping engineering judgment in the loop.</p>
-          </article>
+            <article class="skill-node node-3">
+              <p class="date">review-collection</p>
+              <h3>Review Collection</h3>
+              <dl>
+                <div><dt>Mode</dt><dd>async review pressure</dd></div>
+                <div><dt>Input</dt><dd>finished slice, changed files, risk areas</dd></div>
+                <div><dt>Output</dt><dd>bugs, regressions, edge cases, cleanup notes</dd></div>
+              </dl>
+            </article>
 
-          <article class="detail-card workflow-detail-card">
-            <p class="date">04</p>
-            <h2>Test & Refine</h2>
-            <p>Run targeted checks, inspect failures, compare screenshots for UI work, and iterate until behavior is verified.</p>
-          </article>
+            <article class="skill-node node-4">
+              <p class="date">improve-codebase-architecture</p>
+              <h3>Architecture Scan</h3>
+              <dl>
+                <div><dt>Mode</dt><dd>system design pass</dd></div>
+                <div><dt>Input</dt><dd>existing repo, domain docs, ADRs</dd></div>
+                <div><dt>Output</dt><dd>refactor targets, seams, testability improvements</dd></div>
+              </dl>
+            </article>
 
-          <article class="detail-card workflow-detail-card">
-            <p class="date">05</p>
-            <h2>Document & Ship</h2>
-            <p>Leave behind README notes, agent guidance, handoff context, and release-ready evidence.</p>
-          </article>
+            <article class="skill-node node-5">
+              <p class="date">handoff / to-prd</p>
+              <h3>Handoff / PRD</h3>
+              <dl>
+                <div><dt>Mode</dt><dd>context packaging</dd></div>
+                <div><dt>Input</dt><dd>conversation, plan, implementation state</dd></div>
+                <div><dt>Output</dt><dd>handoff notes, product requirements, next-agent context</dd></div>
+              </dl>
+            </article>
+          </div>
         </section>
-        <section class="detail-section">
-          <div class="detail-card wide-note">
-            <p class="path-title">/workflow/operating-rules.txt</p>
-            <ul class="detail-list">
-              <li>Prefer clear repo instructions, acceptance criteria, and small verifiable changes.</li>
-              <li>Use AI for exploration, drafting, refactoring support, screenshot comparison, and review pressure.</li>
-              <li>Do not trust generated code without running checks and validating the product behavior.</li>
-            </ul>
+        <section class="async-lane-section">
+          <h2 class="section-label">ASYNC OPERATING LOOP</h2>
+          <div class="async-lanes">
+            
+            <div class="async-lane">
+              <span>01</span>
+              <h3>Capture & Clarify</h3>
+              <p>Turn rough notes, screenshots, and requirements into explicit acceptance criteria before building.</p>
+            </div>
+
+            <div class="async-lane">
+              <span>02</span>
+              <h3>Plan & Scaffold</h3>
+              <p>Break down implementation slices, inspect existing patterns, and scaffold the smallest useful structure.</p>
+            </div>
+
+            <div class="async-lane">
+              <span>03</span>
+              <h3>Code with AI</h3>
+              <p>Use agents as accelerators for exploration, implementation, and review while keeping engineering judgment in the loop.</p>
+            </div>
+
+            <div class="async-lane">
+              <span>04</span>
+              <h3>Test & Refine</h3>
+              <p>Run targeted checks, inspect failures, compare screenshots for UI work, and iterate until behavior is verified.</p>
+            </div>
+
+            <div class="async-lane">
+              <span>05</span>
+              <h3>Document & Ship</h3>
+              <p>Leave behind README notes, agent guidance, handoff context, and release-ready evidence.</p>
+            </div>
           </div>
         </section>
         <footer class="main-footer"><span></span><p>Built with Next.js and a lot of ☕</p></footer>
