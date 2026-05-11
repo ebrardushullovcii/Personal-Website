@@ -1,0 +1,11 @@
+{
+  "name": "ebrar-personal-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python -m http.server 4173 --bind 127.0.0.1",
+    "build": "node scripts/build-static.mjs",
+    "check": "node scripts/check-site.mjs"
+  }
+}
