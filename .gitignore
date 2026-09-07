@@ -1,0 +1,19 @@
+# Local dependency and interpreter caches
+node_modules/
+__pycache__/
+*.py[cod]
+
+# Local visual-QA scratch output
+.tmp/
+tmp/
+.tmp-dev-server.*.log
+/artifacts-*
+
+# Private editorial inputs must never be committed or deployed
+/assets/references/resume/
+
+# Operating-system noise
+.DS_Store
+Thumbs.db
+
+# `dist/` is intentionally tracked as the static deployment artifact.

@@ -1,27 +1,66 @@
+"""Create a reusable side-by-side comparison for two equal-size screenshots."""
+
+from argparse import ArgumentParser
+from pathlib import Path
+
 from PIL import Image, ImageDraw
 
-ref = Image.open(r"assets/references/design/personal-website.png").convert("RGB")
-imp = Image.open(r"artifacts-desktop-final.png").convert("RGB")
 
-boxes = [
-    (0, 0, 1122, 390, "top"),
-    (0, 370, 1122, 860, "middle"),
-    (0, 830, 1122, 1170, "projects"),
-    (0, 1130, 1122, 1402, "bottom"),
-]
+def parse_args():
+    parser = ArgumentParser(
+        description="Place two equal-size screenshots side by side for visual review."
+    )
+    parser.add_argument("reference", type=Path, help="Reference image path")
+    parser.add_argument("implementation", type=Path, help="Implementation image path")
+    parser.add_argument("output", type=Path, help="Output PNG or JPEG path")
+    parser.add_argument(
+        "--max-width",
+        type=int,
+        default=1800,
+        help="Maximum output width; images are scaled together (default: 1800)",
+    )
+    parser.add_argument("--reference-label", default="REFERENCE")
+    parser.add_argument("--implementation-label", default="IMPLEMENTATION")
+    return parser.parse_args()
 
-for x1, y1, x2, y2, name in boxes:
-    w, h = x2 - x1, y2 - y1
-    scale = 0.55
-    rw, rh = int(w * scale), int(h * scale)
-    left = ref.crop((x1, y1, x2, y2)).resize((rw, rh))
-    right = imp.crop((x1, y1, x2, y2)).resize((rw, rh))
-    canvas = Image.new("RGB", (rw * 2, rh + 24), (8, 12, 16))
-    canvas.paste(left, (0, 24))
-    canvas.paste(right, (rw, 24))
-    d = ImageDraw.Draw(canvas)
-    d.text((8, 6), f"REFERENCE {name}", fill=(230, 236, 234))
-    d.text((rw + 8, 6), f"IMPLEMENTATION {name}", fill=(230, 236, 234))
-    canvas.save(f"artifacts-compare-{name}.jpg", quality=82)
-    medium = canvas.resize((900, int(canvas.height * 900 / canvas.width)))
-    medium.save(f"artifacts-compare-{name}-900.jpg", quality=84)
+
+def main():
+    args = parse_args()
+    if args.max_width <= 0:
+        raise SystemExit("--max-width must be greater than zero")
+
+    reference = Image.open(args.reference).convert("RGB")
+    implementation = Image.open(args.implementation).convert("RGB")
+    if reference.size != implementation.size:
+        raise SystemExit(
+            f"Size mismatch: reference is {reference.size}, "
+            f"implementation is {implementation.size}"
+        )
+
+    header_height = 30
+    natural_width = reference.width * 2
+    scale = min(1.0, args.max_width / natural_width)
+    image_width = max(1, round(reference.width * scale))
+    image_height = max(1, round(reference.height * scale))
+    if scale < 1:
+        size = (image_width, image_height)
+        reference = reference.resize(size, Image.Resampling.LANCZOS)
+        implementation = implementation.resize(size, Image.Resampling.LANCZOS)
+
+    canvas = Image.new("RGB", (image_width * 2, image_height + header_height), (8, 12, 16))
+    canvas.paste(reference, (0, header_height))
+    canvas.paste(implementation, (image_width, header_height))
+
+    draw = ImageDraw.Draw(canvas)
+    draw.text((9, 9), args.reference_label, fill=(230, 236, 234))
+    draw.text((image_width + 9, 9), args.implementation_label, fill=(230, 236, 234))
+    draw.line((image_width, 0, image_width, canvas.height), fill=(86, 110, 112), width=1)
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    save_options = {"quality": 90} if args.output.suffix.lower() in {".jpg", ".jpeg"} else {}
+    canvas.save(args.output, **save_options)
+    print(f"Wrote {args.output} ({canvas.width}x{canvas.height})")
+
+
+if __name__ == "__main__":
+    main()

@@ -318,22 +318,22 @@ Use a left sidebar plus a main content dashboard.
 
 Recommended structure:
 
-- Sidebar: `260px` to `300px`
+- Sidebar: approximately `218px` to `242px`, depending on the desktop viewport
 - Main content: `1fr`
 - Main internal grid: 2 columns
 - Gaps: `0px` or very small
 - Separators: created mostly through borders
 - Overall page border: subtle, visible
 
-The design should have a full-height application feel.
+The design should have a full-height application feel. The shell runs edge to edge; do not add an unexplained outer gutter to the left of the sidebar.
 
 ### Sidebar
 
-The sidebar should be fixed or sticky on desktop.
+The sidebar should be sticky on desktop.
 
 Recommended width:
 
-- `280px`
+- Approximately `242px` on wide desktop and `218px` on compact desktop
 
 The sidebar contains:
 
@@ -347,6 +347,8 @@ The sidebar contains:
 - Copyright/footer detail
 
 The sidebar should be visually separated from the main content with a vertical border.
+
+On long pages, keep the identity and primary navigation available while the rest of the rail scrolls. Copyright belongs at the end of the sidebar content, not midway down the viewport.
 
 ### Main Content
 
@@ -399,7 +401,7 @@ Use generous internal padding, but keep the total dashboard compact.
 
 Recommended spacing:
 
-- Page padding: `0px` to `8px` if the full interface has an outer border
+- Page padding: `0px`; the application shell is edge to edge
 - Sidebar padding: `24px` to `32px`
 - Main panel padding: `28px` to `40px`
 - Small item padding: `12px` to `18px`
@@ -525,7 +527,7 @@ Example:
     Focus          Deep Work
     Availability   Open
     Location       Remote
-    Last Updated   May 18, 2025
+    Last Updated   July 2026
 
 Rules:
 
@@ -712,9 +714,9 @@ Include a small link at the bottom:
 
 ## Selected Work Projects
 
-Project cards should look like terminal panels inside the grid.
+The project index should use wide, alternating case-study rows. Each row pairs the existing terminal-panel copy with a visual pane so the page has a left/right rhythm instead of becoming another uniform card grid.
 
-### Card Structure
+### Row Structure
 
 Each card should include:
 
@@ -733,7 +735,7 @@ Example:
 
 ### Visual Rules
 
-Cards should be:
+Rows should be:
 
 - Rectangular
 - Dark-panel based
@@ -741,11 +743,15 @@ Cards should be:
 - Compact
 - Slightly brighter on hover
 - Mostly sharp-cornered
+- Alternating image-left and image-right on desktop
+- Copy-first in document order and on mobile
+- Visually grounded in real project screenshots, existing product marks, or official technology icons
 
 Avoid:
 
-- Large screenshots inside every card
-- Big images
+- Generic stock imagery or fake placeholder panels
+- Publishing client screenshots without explicit permission
+- Full-bleed marketing imagery that overpowers the project explanation
 - Gradient cards
 - Badge-heavy layouts
 - Marketing-style feature cards
@@ -774,7 +780,7 @@ Example link:
 
 ## Personal Projects
 
-Personal projects should use the same terminal-card style, but can be slightly smaller.
+Personal projects should use the same alternating row system. Real, safe product screenshots are preferred when they exist; a genuine project mark or an official-icon composition is the fallback when they do not.
 
 ### Card Structure
 
@@ -802,11 +808,11 @@ The AI workflow section should show practical process, not AI hype.
 
 Recommended flow:
 
-1. Capture & Clarify
-2. Plan & Scaffold
-3. Code with AI
-4. Test & Refine
-5. Document & Ship
+1. Find the source of truth
+2. Make the slice explicit
+3. Build with leverage
+4. Verify the real outcome
+5. Leave the system clearer
 
 ### Structure
 
@@ -818,20 +824,22 @@ Each step should include:
 
 Example:
 
-    Capture & Clarify
-    Notes, prompts, and requirements.
+    Find the source of truth
+    Inspect code, behavior, screenshots, logs, and domain context.
 
-    Plan & Scaffold
-    Break down, design, and scaffold.
+    Make the slice explicit
+    Define acceptance criteria, interfaces, risks, and the useful sequence.
 
-    Code with AI
-    Use AI pair programming intentionally.
+    Build with leverage
+    Use agents and automation while keeping product and architecture judgment hands-on.
 
-    Test & Refine
-    Verify, test, and iterate.
+    Verify the real outcome
+    Test the behavior and visually compare interface work.
 
-    Document & Ship
-    Write docs, ship, and gather feedback.
+    Leave the system clearer
+    Preserve decisions, documentation, and handoff context.
+
+The workflow page should also expose concrete review modes rather than treating "AI" as one vague tool: Grill Me for adversarial requirements discovery, Code Quality Review for implementation scrutiny, Visual QA for browser-based comparison, and Handoff for durable continuation context.
 
 ### Tone
 
@@ -850,7 +858,7 @@ The section should show that AI is part of the engineering workflow, not the who
 
 ## Technology Stack Section
 
-The stack section should be compact and table-like.
+The stack section should be compact, visible, and easy to scan.
 
 It should not become a badge wall.
 
@@ -862,22 +870,34 @@ Use rows grouped by category:
 - Frontend
 - Backend
 - Data
-- Infrastructure & DevOps
-- Tools
+- Systems
+- AI
 
 ### Example
 
-    Languages           TypeScript, JavaScript, C#, SQL
-    Frontend            React, Next.js, Tailwind CSS
-    Backend             Node.js, Express, .NET Core, REST APIs
-    Data                SQL Server, PostgreSQL, Redis
-    Infra & DevOps      Docker, GitHub Actions, Azure
-    Tools               Git, Cursor, ChatGPT, Figma, Visual Studio
+    Languages
+    TypeScript, JavaScript, C#, SQL
+
+    Frontend
+    React, Next.js, Expo, CSS
+
+    Backend
+    Node.js, .NET, REST APIs
+
+    Data
+    SQL Server, PostgreSQL, Convex
+
+    Systems
+    Docker, NGINX, Electron, Linux
+
+    AI
+    Agents, vLLM, LiteLLM, MCP
 
 ### Visual Rules
 
-- Category label on the left
-- Tools on the right
+- Category label above or beside its values, depending on available width
+- Values remain visible without hover or disclosure interactions
+- Use multiple rows or a responsive grid so long categories can wrap naturally
 - Small colored icon per category
 - Compact row spacing
 - Muted text for tools
@@ -922,15 +942,13 @@ The footer should be minimal.
 
 Include:
 
-- Copyright
-- Small build note
+- Copyright with the full name
 
 Example:
 
-    © 2025 Ebrar
-    Built with Next.js and a lot of coffee
+    © 2026 Ebrar Dushullovci
 
-The footer should stay quiet and low-contrast.
+The footer should stay quiet and low-contrast. Do not use a framework credit or coffee joke as filler copy.
 
 ---
 
@@ -1172,7 +1190,7 @@ Suggested professional categories:
 - Restaurant order management platforms
 - API-based testing platforms
 - Frontend generation from design files
-- Landing page and website builders
+- Self-hosted AI infrastructure and internal enablement
 - ERP modernization
 - POS and desktop business systems
 - QA automation workflows

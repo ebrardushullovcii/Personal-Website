@@ -3,164 +3,144 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A practical operating loop for turning unclear work into shipped software: clarify, scaffold, code, review, test, document, and ship." />
-    <title>Ebrar — Workflow</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta name="description" content="I use agents and automation throughout delivery, and build self-hosted model infrastructure when control, latency, or routing makes it useful. The operating loop around the tools still matters most." />
+    <meta name="author" content="Ebrar Dushullovci" />
+    <meta name="theme-color" content="#02070b" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ebrar Dushullovci — Workflow" />
+    <meta property="og:description" content="I use agents and automation throughout delivery, and build self-hosted model infrastructure when control, latency, or routing makes it useful. The operating loop around the tools still matters most." />
+    <meta name="twitter:card" content="summary" />
+    <title>Ebrar Dushullovci — Workflow</title>
+    <link rel="preload" href="assets/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="styles.css?v=20260712-8" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="app-frame detail-frame">
       
       <aside class="sidebar" aria-label="Profile navigation">
-        <div class="pathbar">~/engineer/portfolio</div>
+        <div class="pathbar">~/ebrar/portfolio</div>
         <div class="sidebar-body">
-          <div class="identity-block">
-            <h1>Ebrar <span class="status-dot" aria-label="online"></span></h1>
-            <p class="role">Software Engineer</p>
-            <p class="micro-intro">I build practical software<br />that solves real problems<br />and creates value.</p>
-          </div>
-          <nav class="nav-list" aria-label="Section navigation">
+          <div class="sidebar-primary">
+            <div class="identity-block">
+            <p class="identity-name">Ebrar <span class="status-dot" role="img" aria-label="Available for conversation"></span></p>
+            <p class="role">Full-stack Software Engineer</p>
+            <p class="micro-intro">Product-minded engineering<br />for real operational<br />workflows.</p>
+            </div>
+            <nav class="nav-list" aria-label="Section navigation">
             <p class="nav-title">NAVIGATION</p>
-            <a class="nav-item" href="index.html"><span class="prompt">&gt;_</span><span>Overview</span></a>
-            <a class="nav-item" href="work.html"><span class="nav-glyph">▤</span><span>Work</span></a>
-            <a class="nav-item" href="projects.html"><span class="nav-glyph">▧</span><span>Projects</span></a>
-            <a class="nav-item active" href="workflow.html" aria-current="page"><span class="nav-glyph">⌁</span><span>Workflow</span></a>
-            <a class="nav-item" href="about.html"><span class="nav-glyph">○</span><span>About</span></a>
-            <a class="nav-item" href="contact.html"><span class="nav-glyph">✉</span><span>Contact</span></a>
-          </nav>
+            <a class="nav-item" href="index.html?v=20260712-8"><span class="prompt" aria-hidden="true">&gt;_</span><span>Overview</span></a>
+            <a class="nav-item" href="work.html?v=20260712-8"><span class="nav-glyph icon-mask icon-briefcase" aria-hidden="true"></span><span>Work</span></a>
+            <a class="nav-item" href="projects.html?v=20260712-8"><span class="nav-glyph icon-mask icon-folder-git" aria-hidden="true"></span><span>Projects</span></a>
+            <a class="nav-item active" href="workflow.html?v=20260712-8" aria-current="page"><span class="nav-glyph icon-mask icon-git-branch" aria-hidden="true"></span><span>Workflow</span></a>
+            <a class="nav-item" href="about.html?v=20260712-8"><span class="nav-glyph icon-mask icon-user" aria-hidden="true"></span><span>About</span></a>
+            <a class="nav-item" href="contact.html?v=20260712-8"><span class="nav-glyph icon-mask icon-mail" aria-hidden="true"></span><span>Contact</span></a>
+            </nav>
+          </div>
           <section class="sidebar-stack" aria-labelledby="sidebar-stack-title">
-            <h2 id="sidebar-stack-title">TECH STACK</h2>
+            <h2 id="sidebar-stack-title">CORE STACK</h2>
             <div class="sidebar-stack-list">
-              <div><span class="stack-icon yellow">⌘</span><strong>Languages</strong><p>TypeScript, JavaScript, C#, SQL</p></div>
-              <div><span class="stack-icon green">▱</span><strong>Frontend</strong><p>React, Next.js, Tailwind CSS, Expo</p></div>
-              <div><span class="stack-icon blue">▣</span><strong>Backend</strong><p>Node.js, .NET Core, REST APIs</p></div>
-              <div><span class="stack-icon orange">◇</span><strong>Data</strong><p>SQL Server, PostgreSQL, Redis</p></div>
-              <div><span class="stack-icon amber">⌬</span><strong>Infra</strong><p>Docker, NGINX, Linux, GitHub Actions</p></div>
-              <div><span class="stack-icon cyan">⌁</span><strong>AI Tools</strong><p>Cursor, agents, vLLM, LiteLLM</p></div>
+              <div><span class="stack-icon icon-mask icon-braces yellow" aria-hidden="true"></span><strong>Languages</strong><p>TypeScript, JavaScript, C#, SQL</p></div>
+              <div><span class="stack-icon icon-mask icon-panels green" aria-hidden="true"></span><strong>Frontend</strong><p>React, Next.js, Expo, CSS</p></div>
+              <div><span class="stack-icon icon-mask icon-server blue" aria-hidden="true"></span><strong>Backend</strong><p>Node.js, .NET, REST APIs</p></div>
+              <div><span class="stack-icon icon-mask icon-database orange" aria-hidden="true"></span><strong>Data</strong><p>SQL Server, PostgreSQL, Convex</p></div>
+              <div><span class="stack-icon icon-mask icon-container amber" aria-hidden="true"></span><strong>Systems</strong><p>Docker, NGINX, Electron, Linux</p></div>
+              <div><span class="stack-icon icon-mask icon-bot cyan" aria-hidden="true"></span><strong>AI</strong><p>Agents, vLLM, LiteLLM, MCP</p></div>
             </div>
           </section>
           <section class="status-panel" aria-labelledby="system-status-title">
-            <h2 id="system-status-title">SYSTEM STATUS</h2>
+            <h2 id="system-status-title">CURRENT STATUS</h2>
             <dl>
-              <div><dt>Focus</dt><dd class="green">Deep Work</dd></div>
-              <div><dt>Availability</dt><dd class="green">Open</dd></div>
-              <div><dt>Location</dt><dd>Remote</dd></div>
-              <div><dt>Last Updated</dt><dd>May 18, 2025</dd></div>
+              <div><dt>Focus</dt><dd class="green">Product engineering</dd></div>
+              <div><dt>Availability</dt><dd class="green">Let's talk</dd></div>
+              <div><dt>Location</dt><dd>Remote / Europe</dd></div>
+              <div><dt>Updated</dt><dd>July 2026</dd></div>
             </dl>
           </section>
           <section class="external-links" aria-label="External links">
-            <a href="https://github.com/ebrardushullovcii" target="_blank" rel="noreferrer"><span>⌁ GitHub</span><span class="external-mark">↗</span></a>
-            <a href="https://www.linkedin.com/in/ebrar-dushullovci" target="_blank" rel="noreferrer"><span>▣ LinkedIn</span><span class="external-mark">↗</span></a>
-            <a href="assets/references/resume/CV.pdf" target="_blank" rel="noreferrer"><span>▤ Resume (PDF)</span><span class="external-mark">↗</span></a>
+            <a href="https://github.com/ebrardushullovcii" target="_blank" rel="noreferrer"><span><span class="icon-mask icon-github" aria-hidden="true"></span>GitHub</span><span class="external-mark icon-mask icon-external" aria-hidden="true"></span></a>
+            <a href="https://www.linkedin.com/in/ebrar-dushullovci" target="_blank" rel="noreferrer"><span><span class="icon-mask icon-linkedin" aria-hidden="true"></span>LinkedIn</span><span class="external-mark icon-mask icon-external" aria-hidden="true"></span></a>
+            <a href="assets/resume/Ebrar-Dushullovci-Resume.pdf" target="_blank" rel="noreferrer"><span><span class="icon-mask icon-file" aria-hidden="true"></span>Resume (PDF)</span><span class="external-mark icon-mask icon-external" aria-hidden="true"></span></a>
           </section>
-          <section class="whoami" aria-label="Terminal identity">
-            <p>$ whoami</p><span class="terminal-gap" aria-hidden="true"></span><p>&gt; problem-solver</p><p>&gt; builder</p><p>&gt; shipper</p>
+          <section class="whoami" aria-label="Working style">
+            <p>$ working_style</p><span class="terminal-gap" aria-hidden="true"></span><p>&gt; product-minded</p><p>&gt; systems-oriented</p><p>&gt; evidence-driven</p>
           </section>
-          <p class="sidebar-footer">© 2025 Ebrar</p>
+          <p class="sidebar-footer">© 2026 Ebrar Dushullovci</p>
         </div>
       </aside>
-      <main class="dashboard detail-dashboard">
-        <header class="topbar" aria-label="System status"><span></span><p><span class="status-dot small"></span>System Online</p></header>
+      <main id="main-content" class="dashboard detail-dashboard">
+        <header class="topbar" aria-label="Site status"><span>/workflow</span><p><span class="status-dot small" aria-hidden="true"></span>Available for conversation</p></header>
         <section class="detail-hero">
-          <p class="section-label">AI WORKFLOW</p>
-          <h1>How I use AI without letting it replace engineering judgment.<span class="cursor">_</span></h1>
-          <p>A practical operating loop for turning unclear work into shipped software: clarify, scaffold, code, review, test, document, and ship.</p>
+          <p class="section-label">HOW I WORK</p>
+          <h1>AI adds leverage. Engineering judgment keeps the work honest.<span class="cursor">_</span></h1>
+          <p>I use agents and automation throughout delivery, and build self-hosted model infrastructure when control, latency, or routing makes it useful. The operating loop around the tools still matters most.</p>
         </section>
         
-        <section class="workflow-map-section">
-          <div class="workflow-core">
-            <p class="path-title">/global-agent-skills</p>
-            <h2>Async skill router</h2>
-            <p>Different tasks get routed to different skills instead of forcing one generic AI workflow.</p>
-          </div>
-          <div class="skill-node-grid">
-            
-            <article class="skill-node node-1">
-              <p class="date">frontend-design</p>
-              <h3>Frontend Design</h3>
-              <dl>
-                <div><dt>Mode</dt><dd>visual implementation</dd></div>
-                <div><dt>Input</dt><dd>references, screenshots, product taste</dd></div>
-                <div><dt>Output</dt><dd>polished UI, responsive passes, visual diffs</dd></div>
-              </dl>
-            </article>
-
-            <article class="skill-node node-2">
-              <p class="date">agent-browser</p>
-              <h3>Agent Browser</h3>
-              <dl>
-                <div><dt>Mode</dt><dd>browser verification</dd></div>
-                <div><dt>Input</dt><dd>local app, flows, screenshots</dd></div>
-                <div><dt>Output</dt><dd>snapshots, screenshots, interaction evidence</dd></div>
-              </dl>
-            </article>
-
-            <article class="skill-node node-3">
-              <p class="date">review-collection</p>
-              <h3>Review Collection</h3>
-              <dl>
-                <div><dt>Mode</dt><dd>async review pressure</dd></div>
-                <div><dt>Input</dt><dd>finished slice, changed files, risk areas</dd></div>
-                <div><dt>Output</dt><dd>bugs, regressions, edge cases, cleanup notes</dd></div>
-              </dl>
-            </article>
-
-            <article class="skill-node node-4">
-              <p class="date">improve-codebase-architecture</p>
-              <h3>Architecture Scan</h3>
-              <dl>
-                <div><dt>Mode</dt><dd>system design pass</dd></div>
-                <div><dt>Input</dt><dd>existing repo, domain docs, ADRs</dd></div>
-                <div><dt>Output</dt><dd>refactor targets, seams, testability improvements</dd></div>
-              </dl>
-            </article>
-
-            <article class="skill-node node-5">
-              <p class="date">handoff / to-prd</p>
-              <h3>Handoff / PRD</h3>
-              <dl>
-                <div><dt>Mode</dt><dd>context packaging</dd></div>
-                <div><dt>Input</dt><dd>conversation, plan, implementation state</dd></div>
-                <div><dt>Output</dt><dd>handoff notes, product requirements, next-agent context</dd></div>
-              </dl>
-            </article>
-          </div>
+        <section class="workflow-intro" aria-label="Workflow principles">
+          <article class="workflow-intro-copy">
+            <p class="path-title">/workflow/quality-loop.md</p>
+            <h2>Context → slice → build → verify → leave clarity behind.</h2>
+            <p>The point of AI-assisted development is not to generate more code. It is to shorten the distance between a real problem and a verified solution without losing the reasoning that makes the system maintainable.</p>
+          </article>
+          <dl class="workflow-contract">
+            <div><dt>AI LENDS SPEED</dt><dd>Exploration, repetitive edits, scaffolding, comparison, summarization, and review pressure.</dd></div>
+            <div><dt>JUDGMENT STAYS HUMAN</dt><dd>Product decisions, architecture, security boundaries, trade-offs, final copy, and acceptance.</dd></div>
+            <div><dt>DONE LEAVES EVIDENCE</dt><dd>Working behavior, visual checks, understood risks, and enough context for the next person.</dd></div>
+          </dl>
         </section>
-        <section class="async-lane-section">
-          <h2 class="section-label">ASYNC OPERATING LOOP</h2>
-          <div class="async-lanes">
+        <section class="workflow-map-section" aria-labelledby="operating-loop-title">
+          <div class="section-heading-row"><h2 id="operating-loop-title" class="section-label">OPERATING LOOP</h2><p>Follow the signal, not a rigid ceremony</p></div>
+          <figure class="workflow-map">
+            <figcaption class="workflow-core">
+              <p class="path-title">/loop/quality-gate</p>
+              <h2>Evidence decides what happens next.</h2>
+              <p>Every pass either reduces uncertainty, proves the slice, or sends the work back around with better context.</p>
+            </figcaption>
+            <div class="workflow-track" aria-hidden="true"></div>
+            <span class="workflow-signal" aria-hidden="true"></span>
+            <ol class="workflow-nodes">
             
-            <div class="async-lane">
-              <span>01</span>
-              <h3>Capture & Clarify</h3>
-              <p>Turn rough notes, screenshots, and requirements into explicit acceptance criteria before building.</p>
-            </div>
+              <li class="workflow-node node-1">
+                <span>01</span>
+                <div><h3>Find the source of truth</h3><p>Start with the code, live behavior, screenshots, logs, domain docs, and the people closest to the workflow.</p></div>
+              </li>
 
-            <div class="async-lane">
-              <span>02</span>
-              <h3>Plan & Scaffold</h3>
-              <p>Break down implementation slices, inspect existing patterns, and scaffold the smallest useful structure.</p>
-            </div>
+              <li class="workflow-node node-2">
+                <span>02</span>
+                <div><h3>Make the slice explicit</h3><p>Turn the request into acceptance criteria, interfaces, risks, and the smallest useful sequence of changes.</p></div>
+              </li>
 
-            <div class="async-lane">
-              <span>03</span>
-              <h3>Code with AI</h3>
-              <p>Use agents as accelerators for exploration, implementation, and review while keeping engineering judgment in the loop.</p>
-            </div>
+              <li class="workflow-node node-3">
+                <span>03</span>
+                <div><h3>Build with leverage</h3><p>Use AI and automation for exploration and implementation while keeping architecture and product judgment hands-on.</p></div>
+              </li>
 
-            <div class="async-lane">
-              <span>04</span>
-              <h3>Test & Refine</h3>
-              <p>Run targeted checks, inspect failures, compare screenshots for UI work, and iterate until behavior is verified.</p>
-            </div>
+              <li class="workflow-node node-4">
+                <span>04</span>
+                <div><h3>Verify the real outcome</h3><p>Run focused tests, inspect the product, compare screenshots for UI work, and chase the remaining mismatch or failure.</p></div>
+              </li>
 
-            <div class="async-lane">
-              <span>05</span>
-              <h3>Document & Ship</h3>
-              <p>Leave behind README notes, agent guidance, handoff context, and release-ready evidence.</p>
+              <li class="workflow-node node-5">
+                <span>05</span>
+                <div><h3>Leave the system clearer</h3><p>Ship the change with useful documentation, decisions, and context so the next person can continue without archaeology.</p></div>
+              </li>
+            </ol>
+          </figure>
+        </section>
+        <section class="review-router-section">
+          <div class="section-heading-row"><h2 class="section-label">REVIEW MODES</h2><p>Pressure before confidence</p></div>
+          <div class="review-router">
+            <div class="review-router-copy"><p class="path-title">$ route --review</p><h3>Use the review that matches the uncertainty.</h3><p>Not every change needs the same ceremony. The risky or unclear part determines the pressure test.</p></div>
+            <div class="review-routes">
+              <article><span>IF THE PLAN IS FUZZY</span><h3>GRILL ME</h3><p>Interrogate assumptions, terminology, constraints, and trade-offs until the decision tree is clear enough to build.</p></article>
+              <article><span>IF CODE EXISTS</span><h3>CODE QUALITY REVIEW</h3><p>Inspect correctness, security, architecture, edge cases, regressions, and maintenance cost—not just formatting.</p></article>
+              <article><span>IF PEOPLE WILL SEE IT</span><h3>VISUAL QA</h3><p>Compare real browser screenshots at desktop and mobile sizes, fix visible mismatches, and repeat after meaningful changes.</p></article>
+              <article><span>IF WORK CHANGES HANDS</span><h3>HANDOFF</h3><p>Package decisions, verification evidence, follow-ups, and current state for the next person or agent.</p></article>
             </div>
           </div>
         </section>
-        <footer class="main-footer"><span></span><p>Built with Next.js and a lot of ☕</p></footer>
+        <footer class="main-footer"><span>/workflow/end</span><p>© 2026 Ebrar Dushullovci</p></footer>
       </main>
     </div>
   </body>

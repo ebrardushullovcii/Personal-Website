@@ -14,7 +14,7 @@ If you cannot verify an exact match, do not claim success.
 
 1. Build the website to match the provided design image or images as closely as possible.
 2. Run the website locally.
-3. Use the `agent-browser` skill for browser-based verification.
+3. Use the Codex in-app Browser for browser-based verification.
 4. Open the local site in the browser.
 5. Capture screenshots of the implemented page at the relevant viewport sizes.
 6. Compare the implementation screenshots against the provided reference image or images.
@@ -36,7 +36,7 @@ You must verify all of the following before considering the task complete:
 
 ## Required Tools
 
-- Use `agent-browser` whenever browser interaction, screenshot capture, or visual checking is needed.
+- Use the Codex in-app Browser whenever browser interaction, screenshot capture, or visual checking is needed.
 - Use any additional available tools needed to run the project, inspect the code, and iterate on fixes.
 - If helpful, take multiple screenshots at different scroll positions or viewport sizes.
 - If helpful, zoom in and inspect suspicious areas rather than assuming they are correct.

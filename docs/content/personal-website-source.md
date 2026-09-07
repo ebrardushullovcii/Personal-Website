@@ -2,6 +2,8 @@
 
 This file captures the current source material for the personal website. It is not final website copy. Use it as context when turning the site into polished, human-written content.
 
+Last reconciled with the site’s editorial direction: July 2026.
+
 ## Goal
 
 Build a professional, clean personal website for a full-stack software engineer. The site should help job applications stand out by showing intentionality, real project depth, AI workflow experience, work history, selected professional systems, selected personal projects, and practical engineering taste.
@@ -10,7 +12,7 @@ The design should avoid generic portfolio patterns such as repeated boxy cards, 
 
 ## Positioning
 
-- Full-stack software engineer with around 5 years of professional experience.
+- Full-stack software engineer with professional software experience dating to 2019.
 - Main strengths: React, Next.js, Node.js, TypeScript, C#, .NET Framework, .NET Core, ASP.NET Core MVC, SQL Server, REST APIs, API integrations, backend services, frontend architecture, QA automation, and AI-assisted development workflows.
 - Experience spans web apps, desktop apps, POS systems, restaurant software, ERP systems, QA platforms, internal tools, API automation systems, and AI-powered development tooling.
 - Site should make AI workflow visible without sounding like generic AI-generated marketing copy.
@@ -31,6 +33,15 @@ The design should avoid generic portfolio patterns such as repeated boxy cards, 
 - Cut cruft and get to the point because reviewers scan many applications.
 
 ## Professional Work
+
+### Work History Framing
+
+- AutomatedPros: Chief Experience Officer from 2021 to 2023, followed by Senior Full-stack Software Engineer from 2023 to present. The engineering role is the primary current position.
+- Infotech L.L.C: .NET Developer from 2019 to 2022, followed by concurrent .NET consulting from 2022 to present. Describe this as concurrent consulting, not as a second full-time role or an unverified part-time percentage.
+- CREA-KO: .NET Developer in 2019, focused on ERP modernization from .NET Framework to .NET Core MVC.
+- Earlier non-engineering work belongs in one supporting "Earlier roles" or "Useful detours" group: Beautyque project and digital-marketing work, Bit by Bit technical support, and Tregi Kosovo call-center and sales work.
+
+Show company names and role modes directly. The overlapping AutomatedPros and Infotech timelines are intentional and should not be flattened into a single sequential timeline.
 
 ### Restaurant Order Management Platform / Orderific
 
@@ -64,11 +75,13 @@ Main focus areas included reading Figma JSON/design structures, mapping Figma co
 
 This project combines frontend engineering, design systems, automation, prompt engineering, and AI-based code generation.
 
-### Landers Builder
+### Background Work: Landers Builder
 
 Worked on Landers Builder, a landing page and website builder similar to Wix, focused on marketing pages and landing pages.
 
 Key areas included drag-and-drop or builder-style page creation, marketing landing page generation, reusable sections/components, website publishing workflows, frontend rendering, builder UX, and page structure management.
+
+This remains useful source context but is not part of the current featured-work editorial cut; the site currently gives that space to AI infrastructure and internal enablement.
 
 ### Business Management Desktop Application
 
@@ -137,6 +150,9 @@ Also worked on guiding teams on how to use AI tools and automation strategies mo
 
 - SQL
 - SQL Server
+- PostgreSQL
+- SQLite
+- Convex
 - Stored procedures
 - Database-backed business applications
 - Inventory/order/sales data models
@@ -217,6 +233,7 @@ Also worked on guiding teams on how to use AI tools and automation strategies mo
 - Figma Code Connect
 - Design systems
 - Browser dev tools
+- Codex in-app Browser for visual QA and screenshot comparison
 
 ### Backend And API
 
@@ -264,52 +281,46 @@ Also worked on guiding teams on how to use AI tools and automation strategies mo
 
 GitHub: https://github.com/ebrardushullovcii/UnEmployed
 
-Agent-first desktop monorepo for Job Finder and Interview Helper. Stack shown in README: pnpm workspaces, Turbo, TypeScript, Electron, React. Public GitHub page shows 332 commits at the time reviewed. Strong signal for agent-oriented product thinking, desktop app architecture, monorepo structure, and AI-assisted workflow documentation.
+In-development v0.1 desktop monorepo for Job Finder and Interview Helper. It uses pnpm workspaces, Turbo, TypeScript, Electron, React, SQLite, and typed package boundaries. The current product direction is local-first and keeps job-application review safe and non-submitting. Strong signal for agent-oriented product thinking, desktop architecture, and durable repository guidance.
 
 ### ClipVault
 
 GitHub: https://github.com/ebrardushullovcii/ClipVault
 
-Lightweight Windows game clipping tool. Saves the last 2 minutes as high-quality MP4 with separate game audio and microphone tracks. Uses C++ backend with OBS/libobs concepts and Electron + React frontend. Features include system tray recording, two audio tracks, monitor capture, NVENC hardware encoding, modern editor, and portable EXE. Public GitHub page shows 155 commits and 11 releases at the time reviewed. Strong signal because it is concrete, technical, shipped/released, and not just a web CRUD app.
+Shipped Windows game-clipping tool, currently presented as v1.6.0. It saves recent gameplay to MP4 with separate desktop and microphone audio tracks. The product combines a C++/libobs capture backend with an Electron and React interface, plus monitor capture, NVENC with x264 fallback, editing, tagging, favorites, and export tools. Strong signal because it is concrete, technical, released, and not just a web CRUD app.
 
 ### ShowTracker
 
 GitHub: https://github.com/ebrardushullovcii/ShowTracker
 
-Cross-platform show/anime/movie tracker built with Expo, Convex, and NativeWind. Replaces TVTime. Features include discovery, search, episode tracking, watchlists, schedules, custom lists, and stats. Stack includes Expo, TypeScript, Expo Router, NativeWind, Convex, Zustand, MMKV, TMDB, TVMaze, AniList, and Jikan. Public GitHub page shows 55 commits at the time reviewed. Strong signal for cross-platform product development and API integration.
+Public v0.1 cross-platform show, anime, and movie tracker built with Expo, Convex, and NativeWind as a faster, cleaner TVTime alternative. Features include discovery, search, episode tracking, watchlists, schedules, custom lists, imports, and statistics. The repository is public, but it should not be described as open source unless a license is added.
 
 ### RogueLike / Arcane Survivors
 
 GitHub: https://github.com/ebrardushullovcii/RogueLike
 
-Vampire Survivors-like game built with Phaser 3 and TypeScript. Features two playable characters, auto-attacking weapons, upgrade paths, procedural enemy waves, XP progression, and top-down movement. Public GitHub page shows one commit at the time reviewed. Good personality/taste project, but likely less important than ClipVault, UnEmployed, and ShowTracker for a professional portfolio.
-
-### codenames
-
-GitHub attempted: https://github.com/ebrardushullovcii/codenames
-
-Public fetch returned 404 during review. Could be private, deleted, renamed, or differently cased.
+Prototype Vampire Survivors-like browser game built with Phaser 3, TypeScript, and Webpack. Features two playable characters, auto-attacking weapons, upgrade paths, procedural enemy waves, XP progression, and top-down movement. Good personality/taste project, but intentionally less prominent than ClipVault, UnEmployed, and ShowTracker.
 
 ### global-agent-skills
 
-GitHub attempted: https://github.com/ebrardushullovcii/global-agent-skills
+GitHub: https://github.com/ebrardushullovcii/global-agent-skills
 
-Public fetch returned 404 during review. Could be private, deleted, renamed, or differently cased.
+Public collection of reusable agent workflows. The current featured set includes Grill Me, Grill With Docs, architecture improvement, prototyping, and handoff. It is useful portfolio evidence because it turns recurring working patterns into portable instructions rather than leaving them buried in individual sessions.
 
-## Local Repo Assets
+## Private Editorial Inputs
 
-- `assets/references/resume/CV.pdf`: present, but PDF text could not be read directly in the current environment.
-- `assets/references/resume/page1.png`: resume screenshot present.
-- `assets/references/resume/page2.png`: resume screenshot present.
-- `assets/references/resume/page3.png`: resume screenshot present.
+- The source CV was used only as private editorial context. It contains personal contact and identity details and must remain outside this repository.
+- Do not commit source-resume PDFs or rendered source-resume pages. The only website download is the deliberately sanitized derivative at `assets/resume/Ebrar-Dushullovci-Resume.pdf`.
 
 ## Site Content Direction
 
 - Lead with a clear identity: full-stack engineer building practical products, internal systems, automation, and AI-assisted workflows.
 - Do not cram everything onto the homepage.
 - Use a small number of selected projects with depth rather than listing everything equally.
-- Prioritize projects with high signal: ClipVault, UnEmployed, ShowTracker, TestingMill, Figma-to-Next.js generation, restaurant order platform, AI infrastructure/tooling.
-- Use one section that explains AI workflow in practical terms: agents, repo guidance, code review, prompt iteration, local/self-hosted model infrastructure, tool-calling, and design-to-code experiments.
+- Prioritize projects with high signal: ClipVault, UnEmployed, ShowTracker, global-agent-skills, TestingMill, Figma-to-Next.js generation, the restaurant operations platform, and AI infrastructure/tooling.
+- State project maturity honestly: ClipVault is shipped; ShowTracker is a public v0.1 build; UnEmployed is in development; Arcane Survivors is a prototype; global-agent-skills is public tooling.
+- Use one section that explains AI workflow in practical terms: agents, repo guidance, prompt iteration, tool-calling, design-to-code experiments, and self-hosted model infrastructure when control, latency, or routing makes it useful.
+- Name the review modes that make the workflow concrete: Grill Me, Code Quality Review, Visual QA, and Handoff.
 - Include a work timeline, but keep it scannable and not resume-like.
 - Include links to GitHub, LinkedIn, resume PDF, and selected repositories.
 - Consider a short "how I work" section to show taste: shipping useful tools, debugging real systems, improving workflows, writing docs for agents/humans, and balancing product + engineering.
@@ -322,3 +333,4 @@ Public fetch returned 404 during review. Could be private, deleted, renamed, or 
 - Show engineering depth through structure and hierarchy, not through clutter.
 - Mobile should feel intentionally designed, not just stacked desktop blocks.
 - Visual tone can vary across design explorations: editorial, command-center, blueprint, workspace, systems map, product case-study, technical notebook, or quiet premium portfolio.
+- The current project index uses alternating image-led case-study rows. Public personal projects may use real local screenshots or product marks; professional work should use sanitized official technology marks until client imagery is explicitly approved.

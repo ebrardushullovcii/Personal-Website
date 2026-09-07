@@ -1,0 +1,4 @@
+Official TMDB logo asset downloaded from:
+https://www.themoviedb.org/about/logos-attribution
+
+This product uses the TMDB API but is not endorsed or certified by TMDB.

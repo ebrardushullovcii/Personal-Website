@@ -3,106 +3,151 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A deeper view of the work behind the dashboard: business applications, internal tools, QA systems, ordering platforms, and AI-assisted delivery workflows." />
-    <title>Ebrar — Work</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta name="description" content="My work spans restaurant systems, QA automation, business software, product operations, and developer tooling. The common thread is making complex workflows understandable and dependable." />
+    <meta name="author" content="Ebrar Dushullovci" />
+    <meta name="theme-color" content="#02070b" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ebrar Dushullovci — Work" />
+    <meta property="og:description" content="My work spans restaurant systems, QA automation, business software, product operations, and developer tooling. The common thread is making complex workflows understandable and dependable." />
+    <meta name="twitter:card" content="summary" />
+    <title>Ebrar Dushullovci — Work</title>
+    <link rel="preload" href="assets/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="styles.css?v=20260712-8" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="app-frame detail-frame">
       
       <aside class="sidebar" aria-label="Profile navigation">
-        <div class="pathbar">~/engineer/portfolio</div>
+        <div class="pathbar">~/ebrar/portfolio</div>
         <div class="sidebar-body">
-          <div class="identity-block">
-            <h1>Ebrar <span class="status-dot" aria-label="online"></span></h1>
-            <p class="role">Software Engineer</p>
-            <p class="micro-intro">I build practical software<br />that solves real problems<br />and creates value.</p>
-          </div>
-          <nav class="nav-list" aria-label="Section navigation">
+          <div class="sidebar-primary">
+            <div class="identity-block">
+            <p class="identity-name">Ebrar <span class="status-dot" role="img" aria-label="Available for conversation"></span></p>
+            <p class="role">Full-stack Software Engineer</p>
+            <p class="micro-intro">Product-minded engineering<br />for real operational<br />workflows.</p>
+            </div>
+            <nav class="nav-list" aria-label="Section navigation">
             <p class="nav-title">NAVIGATION</p>
-            <a class="nav-item" href="index.html"><span class="prompt">&gt;_</span><span>Overview</span></a>
-            <a class="nav-item active" href="work.html" aria-current="page"><span class="nav-glyph">▤</span><span>Work</span></a>
-            <a class="nav-item" href="projects.html"><span class="nav-glyph">▧</span><span>Projects</span></a>
-            <a class="nav-item" href="workflow.html"><span class="nav-glyph">⌁</span><span>Workflow</span></a>
-            <a class="nav-item" href="about.html"><span class="nav-glyph">○</span><span>About</span></a>
-            <a class="nav-item" href="contact.html"><span class="nav-glyph">✉</span><span>Contact</span></a>
-          </nav>
+            <a class="nav-item" href="index.html?v=20260712-8"><span class="prompt" aria-hidden="true">&gt;_</span><span>Overview</span></a>
+            <a class="nav-item active" href="work.html?v=20260712-8" aria-current="page"><span class="nav-glyph icon-mask icon-briefcase" aria-hidden="true"></span><span>Work</span></a>
+            <a class="nav-item" href="projects.html?v=20260712-8"><span class="nav-glyph icon-mask icon-folder-git" aria-hidden="true"></span><span>Projects</span></a>
+            <a class="nav-item" href="workflow.html?v=20260712-8"><span class="nav-glyph icon-mask icon-git-branch" aria-hidden="true"></span><span>Workflow</span></a>
+            <a class="nav-item" href="about.html?v=20260712-8"><span class="nav-glyph icon-mask icon-user" aria-hidden="true"></span><span>About</span></a>
+            <a class="nav-item" href="contact.html?v=20260712-8"><span class="nav-glyph icon-mask icon-mail" aria-hidden="true"></span><span>Contact</span></a>
+            </nav>
+          </div>
           <section class="sidebar-stack" aria-labelledby="sidebar-stack-title">
-            <h2 id="sidebar-stack-title">TECH STACK</h2>
+            <h2 id="sidebar-stack-title">CORE STACK</h2>
             <div class="sidebar-stack-list">
-              <div><span class="stack-icon yellow">⌘</span><strong>Languages</strong><p>TypeScript, JavaScript, C#, SQL</p></div>
-              <div><span class="stack-icon green">▱</span><strong>Frontend</strong><p>React, Next.js, Tailwind CSS, Expo</p></div>
-              <div><span class="stack-icon blue">▣</span><strong>Backend</strong><p>Node.js, .NET Core, REST APIs</p></div>
-              <div><span class="stack-icon orange">◇</span><strong>Data</strong><p>SQL Server, PostgreSQL, Redis</p></div>
-              <div><span class="stack-icon amber">⌬</span><strong>Infra</strong><p>Docker, NGINX, Linux, GitHub Actions</p></div>
-              <div><span class="stack-icon cyan">⌁</span><strong>AI Tools</strong><p>Cursor, agents, vLLM, LiteLLM</p></div>
+              <div><span class="stack-icon icon-mask icon-braces yellow" aria-hidden="true"></span><strong>Languages</strong><p>TypeScript, JavaScript, C#, SQL</p></div>
+              <div><span class="stack-icon icon-mask icon-panels green" aria-hidden="true"></span><strong>Frontend</strong><p>React, Next.js, Expo, CSS</p></div>
+              <div><span class="stack-icon icon-mask icon-server blue" aria-hidden="true"></span><strong>Backend</strong><p>Node.js, .NET, REST APIs</p></div>
+              <div><span class="stack-icon icon-mask icon-database orange" aria-hidden="true"></span><strong>Data</strong><p>SQL Server, PostgreSQL, Convex</p></div>
+              <div><span class="stack-icon icon-mask icon-container amber" aria-hidden="true"></span><strong>Systems</strong><p>Docker, NGINX, Electron, Linux</p></div>
+              <div><span class="stack-icon icon-mask icon-bot cyan" aria-hidden="true"></span><strong>AI</strong><p>Agents, vLLM, LiteLLM, MCP</p></div>
             </div>
           </section>
           <section class="status-panel" aria-labelledby="system-status-title">
-            <h2 id="system-status-title">SYSTEM STATUS</h2>
+            <h2 id="system-status-title">CURRENT STATUS</h2>
             <dl>
-              <div><dt>Focus</dt><dd class="green">Deep Work</dd></div>
-              <div><dt>Availability</dt><dd class="green">Open</dd></div>
-              <div><dt>Location</dt><dd>Remote</dd></div>
-              <div><dt>Last Updated</dt><dd>May 18, 2025</dd></div>
+              <div><dt>Focus</dt><dd class="green">Product engineering</dd></div>
+              <div><dt>Availability</dt><dd class="green">Let's talk</dd></div>
+              <div><dt>Location</dt><dd>Remote / Europe</dd></div>
+              <div><dt>Updated</dt><dd>July 2026</dd></div>
             </dl>
           </section>
           <section class="external-links" aria-label="External links">
-            <a href="https://github.com/ebrardushullovcii" target="_blank" rel="noreferrer"><span>⌁ GitHub</span><span class="external-mark">↗</span></a>
-            <a href="https://www.linkedin.com/in/ebrar-dushullovci" target="_blank" rel="noreferrer"><span>▣ LinkedIn</span><span class="external-mark">↗</span></a>
-            <a href="assets/references/resume/CV.pdf" target="_blank" rel="noreferrer"><span>▤ Resume (PDF)</span><span class="external-mark">↗</span></a>
+            <a href="https://github.com/ebrardushullovcii" target="_blank" rel="noreferrer"><span><span class="icon-mask icon-github" aria-hidden="true"></span>GitHub</span><span class="external-mark icon-mask icon-external" aria-hidden="true"></span></a>
+            <a href="https://www.linkedin.com/in/ebrar-dushullovci" target="_blank" rel="noreferrer"><span><span class="icon-mask icon-linkedin" aria-hidden="true"></span>LinkedIn</span><span class="external-mark icon-mask icon-external" aria-hidden="true"></span></a>
+            <a href="assets/resume/Ebrar-Dushullovci-Resume.pdf" target="_blank" rel="noreferrer"><span><span class="icon-mask icon-file" aria-hidden="true"></span>Resume (PDF)</span><span class="external-mark icon-mask icon-external" aria-hidden="true"></span></a>
           </section>
-          <section class="whoami" aria-label="Terminal identity">
-            <p>$ whoami</p><span class="terminal-gap" aria-hidden="true"></span><p>&gt; problem-solver</p><p>&gt; builder</p><p>&gt; shipper</p>
+          <section class="whoami" aria-label="Working style">
+            <p>$ working_style</p><span class="terminal-gap" aria-hidden="true"></span><p>&gt; product-minded</p><p>&gt; systems-oriented</p><p>&gt; evidence-driven</p>
           </section>
-          <p class="sidebar-footer">© 2025 Ebrar</p>
+          <p class="sidebar-footer">© 2026 Ebrar Dushullovci</p>
         </div>
       </aside>
-      <main class="dashboard detail-dashboard">
-        <header class="topbar" aria-label="System status"><span></span><p><span class="status-dot small"></span>System Online</p></header>
+      <main id="main-content" class="dashboard detail-dashboard">
+        <header class="topbar" aria-label="Site status"><span>/work</span><p><span class="status-dot small" aria-hidden="true"></span>Available for conversation</p></header>
         <section class="detail-hero">
           <p class="section-label">WORK HISTORY</p>
-          <h1>Professional systems, product work, and operations-heavy software.<span class="cursor">_</span></h1>
-          <p>A deeper view of the work behind the dashboard: business applications, internal tools, QA systems, ordering platforms, and AI-assisted delivery workflows.</p>
+          <h1>Software shaped by real operations, not demo data.<span class="cursor">_</span></h1>
+          <p>My work spans restaurant systems, QA automation, business software, product operations, and developer tooling. The common thread is making complex workflows understandable and dependable.</p>
         </section>
         
-        <section class="work-timeline-section">
+        <section class="work-timeline-section" aria-label="Professional experience">
           <div class="work-timeline-rail" aria-hidden="true"></div>
           
           <article class="work-timeline-item current">
-            <div class="work-date"><span>2021 - Present</span></div>
+            <div class="work-date"><span>2023 - Present</span></div>
             <div class="work-body">
-              <p class="path-title">/product-and-platform-systems</p>
-              <h2>Senior Software Engineer</h2>
-              <p>Building product systems across frontend, backend, QA automation, and AI-assisted developer workflows.</p>
-              <ul class="detail-list"><li>Developed restaurant order management flows covering customer ordering, staff tools, kitchen operations, reservations, and management dashboards.</li><li>Designed internal QA tooling for dynamic API tests, batch execution, result tracking, and ticket handoff.</li><li>Worked on Figma-to-Next.js generation experiments that connect design structures, components, prompts, and validation loops.</li></ul>
-              <p class="tech">React · Next.js · Node.js · TypeScript · SQL · AI agents</p>
+              <p class="path-title">/automatedpros/senior-full-stack</p>
+              <div class="role-line"><h2>Senior Full-stack Software Engineer</h2><p class="company-name">@ AutomatedPros</p><span class="role-mode">Primary role</span></div>
+              <p>Hands-on product engineering across real-time restaurant operations, QA automation, and AI-assisted frontend systems.</p>
+              <ul class="detail-list"><li>Engineered restaurant ordering and kitchen workflows with React, Next.js, Tailwind CSS, and WebSockets, keeping order state synchronized across operational screens.</li><li>Led a QA management platform with dynamic test templates, executable API integrations, real-time results, reporting, and ticket handoff.</li><li>Built and reviewed reusable frontend patterns for product dashboards, builder workflows, and Figma-to-Next.js generation experiments.</li></ul>
+              <p class="tech">React · Next.js · TypeScript · Node.js · WebSockets · QA automation</p>
+            </div>
+          </article>
+
+          <article class="work-timeline-item current">
+            <div class="work-date"><span>2022 - Present</span></div>
+            <div class="work-body">
+              <p class="path-title">/infotech/dotnet-consulting</p>
+              <div class="role-line"><h2>.NET Consultant</h2><p class="company-name">@ Infotech L.L.C</p><span class="role-mode">Concurrent consulting</span></div>
+              <p>On-call architecture support, performance triage, code review, mentoring, and reliability work for business-critical .NET systems.</p>
+              <ul class="detail-list"><li>Diagnose production issues and query bottlenecks across long-running operational systems.</li><li>Review architecture and refactoring work with an emphasis on stability, maintainability, and practical delivery risk.</li><li>Mentor developers through paired sessions, playbooks, and focused technical guidance.</li></ul>
+              <p class="tech">C# · .NET · SQL Server · Architecture · Performance</p>
             </div>
           </article>
 
           <article class="work-timeline-item">
-            <div class="work-date"><span>2019 - 2021</span></div>
+            <div class="work-date"><span>2021 - 2023</span></div>
             <div class="work-body">
-              <p class="path-title">/restaurant-and-business-software</p>
-              <h2>Full-stack Developer</h2>
-              <p>Built ordering, delivery, POS, dashboard, and SQL-backed business application features.</p>
-              <ul class="detail-list"><li>Implemented .NET MVC delivery workflows and backend business logic for ordering systems.</li><li>Created management views, reporting surfaces, and operational interfaces for business users.</li><li>Collaborated across feature planning, implementation, QA, and release follow-through.</li></ul>
-              <p class="tech">C# · ASP.NET MVC · SQL Server · JavaScript · REST APIs</p>
+              <p class="path-title">/automatedpros/customer-experience</p>
+              <div class="role-line"><h2>Chief Experience Officer</h2><p class="company-name">@ AutomatedPros</p><span class="role-mode">Leadership / operations</span></div>
+              <p>Connected customer needs, support, QA, product planning, and development before returning to a fully hands-on engineering role.</p>
+              <ul class="detail-list"><li>Led customer-experience initiatives and turned recurring support friction into product and tooling priorities.</li><li>Coordinated support, QA, and development work around bugs, feature requests, onboarding, and release readiness.</li><li>Built a strong product-operations perspective that now informs how I design and ship software.</li></ul>
+              <p class="tech">Product operations · QA · Team coordination · Customer workflows</p>
             </div>
           </article>
 
           <article class="work-timeline-item">
-            <div class="work-date"><span>2017 - 2019</span></div>
+            <div class="work-date"><span>2019 - 2022</span></div>
             <div class="work-body">
-              <p class="path-title">/desktop-and-operations-systems</p>
-              <h2>Software Developer</h2>
-              <p>Built desktop modules, reporting flows, hardware-adjacent features, and internal tools.</p>
-              <ul class="detail-list"><li>Worked on inventory, sales, tax document generation, POS, car repair, and gas pump management modules.</li><li>Handled database operations, business rules, and operational debugging for real-world workflows.</li><li>Learned to value reliability, readable systems, and boring tools that solve actual problems.</li></ul>
-              <p class="tech">.NET Framework · SQL Server · Desktop UI · Reporting</p>
+              <p class="path-title">/infotech/dotnet-development</p>
+              <div class="role-line"><h2>.NET Developer</h2><p class="company-name">@ Infotech L.L.C</p><span class="role-mode">Full-time</span></div>
+              <p>Built and maintained desktop and web software for inventory, sales, tax documents, POS, restaurant operations, repair shops, and fuel-pump control.</p>
+              <ul class="detail-list"><li>Implemented SQL-backed business logic, reporting, real-time inventory updates, POS workflows, and operational integrations.</li><li>Led a .NET MVC logistics and delivery application from registration through live order tracking and response handling.</li><li>Worked directly with the messy edge cases of long-lived software used in day-to-day business operations.</li></ul>
+              <p class="tech">.NET Framework · .NET MVC · SQL Server · Desktop UI · Reporting</p>
+            </div>
+          </article>
+
+          <article class="work-timeline-item">
+            <div class="work-date"><span>2019</span></div>
+            <div class="work-body">
+              <p class="path-title">/crea-ko/dotnet-development</p>
+              <div class="role-line"><h2>.NET Developer</h2><p class="company-name">@ CREA-KO</p><span class="role-mode">Full-time</span></div>
+              <p>Helped migrate and modernize a web-based ERP system from .NET Framework to .NET Core MVC.</p>
+              <ul class="detail-list"><li>Refactored frontend and backend code around the newer MVC architecture.</li><li>Removed deprecated packages and coordinated compatibility fixes across the development team.</li></ul>
+              <p class="tech">.NET Core MVC · C# · ERP · Migration</p>
             </div>
           </article>
         </section>
-        <footer class="main-footer"><span></span><p>Built with Next.js and a lot of ☕</p></footer>
+        <section class="detail-section side-quests-section">
+          <div class="section-heading-row"><h2 class="section-label">EARLIER ROLES</h2><p>One card, several useful detours</p></div>
+          <div class="side-quest-card">
+            <p class="path-title">/work/useful-detours</p>
+            <div class="side-quest-list">
+              <article><span>2017 - 2018 · Beautyque</span><h3>Project &amp; digital marketing work</h3><p>Ran small web projects, campaigns, QA checklists, and stakeholder coordination—an early lesson in shipping to an outcome, not just a spec.</p></article>
+              <article><span>2017 · Bit by Bit</span><h3>Technical support</h3><p>Resolved high-volume IPTV incidents and wrote troubleshooting steps, which made clear communication and reproducible debugging second nature.</p></article>
+              <article><span>2016 · Tregi Kosovo</span><h3>Call center &amp; sales</h3><p>Learned to listen for the actual problem, explain clearly, and stay useful when the conversation is messy.</p></article>
+            </div>
+            <a class="terminal-link" href="assets/resume/Ebrar-Dushullovci-Resume.pdf" target="_blank" rel="noreferrer">→ Open the full chronology</a>
+          </div>
+        </section>
+        <footer class="main-footer"><span>/work/end</span><p>© 2026 Ebrar Dushullovci</p></footer>
       </main>
     </div>
   </body>
