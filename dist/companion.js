@@ -6,7 +6,7 @@
   const image = actor.querySelector('img');
   const sprite = actor.querySelector('.companion-sprite');
   const attentionLayer = image.cloneNode();
-  attentionLayer.className='companion-attention';attentionLayer.style.opacity='0';sprite.append(attentionLayer);
+  attentionLayer.className='companion-attention';sprite.append(attentionLayer);
   const hit = actor.querySelector('.companion-hit');
   const status = actor.querySelector('.companion-status');
   const ring = actor.querySelector('.companion-ring');
@@ -34,7 +34,6 @@
   const reviewAction = new URLSearchParams(location.search).get('companion-review');
   let previous = '';
   let reaction=null, lastReaction='', lastClick=-Infinity, gaze='rest', idleScene=null, idleTimer=0, previousScene='', outing=null, lastOuting=-Infinity;
-  let gazeMotion={x:0,angle:0,sx:1,sy:1};
   let drawn={y:0,x:0,pose:'rest'}, lastTargetChange=-Infinity, fastScrollAt=-Infinity, clickGrace=-Infinity, previousScroll=scrollY, scrollTime=performance.now();
   let current = 0, wanted = 0, trip = null, frame = 0, restUntil = 0, lastPose = '', idleStart = performance.now(), debounce = 0;
   const ease = t => t*t*(3-2*t);
@@ -58,6 +57,7 @@
     used.set(chosen.name,now); previous=chosen.name; return chosen;
   }
   function pose(name) {
+    actor.classList.toggle('companion-looking',name==='rest'&&!motion.matches&&desktop.matches);
     if(name===lastPose) return;
     image.src=cache[name].src; lastPose=name; actor.dataset.pose=name;
   }
@@ -127,7 +127,7 @@
     }
     if(reaction && !trip) {
       clearProps();const q=(now-reaction.start)/reaction.duration;
-      paint(position(current),0,0,reaction.facing,1,q<.16?'crouch':q<.70?reaction.name:q<.88?'recover':gaze);
+      paint(position(current),0,0,reaction.facing,1,q<.16?'crouch':q<.70?reaction.name:q<.88?'recover':'rest');
       frame=requestAnimationFrame(tick);return;
     }
     if(idleScene && wanted===current) {
@@ -210,7 +210,7 @@
       if(t===1) {current=to;trip=null;clearProps();actor.dataset.action='rest';restUntil=now+280;idleStart=now;paint(position(current));scheduleIdle();}
     } else {
       const idle=now-idleStart;
-      paint(position(current),gazeMotion.x,idle>450&&idle<1050?1.2*Math.sin(idle/160):gazeMotion.angle,gazeMotion.sx,gazeMotion.sy,idle>450&&idle<1050?'wave':gaze);
+      paint(position(current));
       if(now>=restUntil && wanted===current && idle>1150) {frame=0;return;}
     }
     frame=requestAnimationFrame(tick);
@@ -247,13 +247,12 @@
     if(!hover.matches||motion.matches||!desktop.matches||performance.now()-lookTime<90)return;lookTime=performance.now();
     const r=nav.getBoundingClientRect(), x=r.right-22, y=r.top+drawn.y-48;
     const dx=event.clientX-x,dy=event.clientY-y;
-    gaze=dy<-95?'grab':dx<-380&&Math.abs(dy)<140?'swat':dy>100?'look-down':dx<-60?'look-left':dx>18?'look-right':'rest';
-    gazeMotion={x:dx<-60?-3:dx>18?2:0,angle:dy<-95?-4:dx<-60?-4.5:dx>18?4:0,sx:dy<-95&&dx<0?-1:1,sy:dy>100?.97:1};
-    if(!trip&&!reaction&&!outing&&!idleScene&&wanted===current){
-      const old=image.src;
-      paint(position(current),gazeMotion.x,gazeMotion.angle,gazeMotion.sx,gazeMotion.sy,gaze);
-      if(old!==image.src){attentionLayer.src=old;attentionLayer.animate([{opacity:1},{opacity:0}],{duration:150,easing:'ease-out'});}
-    }
+    // Cursor attention changes only the clipped illustrated head. The resting
+    // body, action scheduler and click reactions are independent of the pointer.
+    gaze=dy>100?'look-down':dx<-60?'look-left':dx>18?'look-right':'rest';
+    attentionLayer.src=cache[gaze].src;
+    attentionLayer.style.transform=`translate(${dx<-60?-.35:dx>18?.35:0}px,${dy>100?.35:dy<-95?-.25:0}px) rotate(${dy>100?1:dy<-95?-1:dx<-60?-1.5:dx>18?1.5:0}deg)`;
+    actor.dataset.gaze=gaze;
   },{passive:true});
   Promise.all(Object.values(cache).map(img=>img.decode().catch(()=>{}))).then(()=>{
     current=wanted=Math.max(0,links.findIndex(link=>link.classList.contains('active')));actor.classList.add('ready');paint(position(current));hit.disabled=!desktop.matches||innerHeight<461;wake();scheduleIdle(['typing','surprise','media-hop'].includes(reviewAction)?650:4200);
