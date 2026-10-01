@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npm run build && python scripts/dev-server.py",
+    "dev": "npm run build && python3 scripts/dev-server.py",
     "build": "node scripts/build-static.mjs",
-    "check": "node scripts/check-site.mjs"
+    "check": "node scripts/check-site.mjs",
+    "resume": "node scripts/make-resume.mjs"
+  },
+  "devDependencies": {
+    "simple-icons": "^16.30.0"
   }
 }

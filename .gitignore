@@ -17,3 +17,6 @@ tmp/
 Thumbs.db
 
 # `dist/` is intentionally tracked as the static deployment artifact.
+
+# Local Netlify CLI state
+.netlify/

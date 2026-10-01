@@ -1,12 +1,4 @@
 # Docs
 
-This folder contains planning and reference documentation for the personal website.
-
-## Structure
-
-- `design/design-direction.md`: detailed visual system and UI direction for the portfolio.
-- `content/personal-website-source.md`: source material about work history, projects, tools, and content direction.
-
-## Reference Assets
-
-Visual references and resume assets live in `../assets/references/`.
+- `design/design-direction.md`: the original terminal-dashboard design brief. Superseded on 2026-09-07 by the single-page redesign (see `AGENTS.md` for the current structure); kept for history.
+- `content/personal-website-source.md`: raw source notes about work history, projects, and tools. `data.js` is the edited, public version of this material.
