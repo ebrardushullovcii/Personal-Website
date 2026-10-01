@@ -34,6 +34,11 @@
   const reviewAction = new URLSearchParams(location.search).get('companion-review');
   let previous = '';
   let reaction=null, lastReaction='', lastClick=-Infinity, gaze='rest', idleScene=null, idleTimer=0, previousScene='', outing=null, lastOuting=-Infinity;
+  // Four seconds of idle after a short scroll-settle window. Landings and
+  // section observers never restart this clock; actual browsing input does.
+  const browsingIdleDelay = 4200;
+  let idleDeadline=performance.now()+browsingIdleDelay, touching=false, lastAnchor=null;
+  const anchorVisits=new WeakMap();
   let drawn={y:0,x:0,pose:'rest'}, lastTargetChange=-Infinity, fastScrollAt=-Infinity, clickGrace=-Infinity, previousScroll=scrollY, scrollTime=performance.now();
   let current = 0, wanted = 0, trip = null, frame = 0, restUntil = 0, lastPose = '', idleStart = performance.now(), debounce = 0;
   const ease = t => t*t*(3-2*t);
@@ -80,29 +85,42 @@
   }
   function hurry(index,rough=false) {
     outing=null;idleScene=null;reaction=null;
+    actor.dataset.anchor='';
     trip={from:current,to:index,start:performance.now(),startY:drawn.y,startX:drawn.x,action:{name:'hurry',duration:rough?1200:780,rough}};
     actor.dataset.action='hurry';wake();
   }
-  function scheduleIdle(delay=['typing','surprise','media-hop'].includes(reviewAction)?800:4200) {
+  function scheduleIdle(delay) {
     clearTimeout(idleTimer);
-    if(motion.matches||!desktop.matches||!hover.matches) return;
-    idleTimer=setTimeout(startIdle,delay);
+    if(delay!==undefined) idleDeadline=Math.max(idleDeadline,performance.now()+delay);
+    if(motion.matches||!desktop.matches||!hover.matches||!actor.classList.contains('ready')) return;
+    idleTimer=setTimeout(startIdle,Math.max(0,idleDeadline-performance.now()));
+  }
+  function browsingActivity() {
+    idleDeadline=performance.now()+browsingIdleDelay;
+    if(outing) hurry(wanted);
+    if(idleScene) {
+      idleScene=null;clearProps();actor.dataset.action='rest';paint(position(current));wake();
+    }
+    scheduleIdle();
   }
   function mediaAnchor() {
-    const navRect=nav.getBoundingClientRect(), center=navRect.right-22;
+    const now=performance.now(), navRect=nav.getBoundingClientRect(), center=navRect.right-22;
     const copy=[...document.querySelectorAll('main h1,main h2,main h3,main p')].map(el=>el.getBoundingClientRect());
     return [...document.querySelectorAll('.shot,main .diagram-frame,main .btn')].map(element=>({element,rect:element.getBoundingClientRect()}))
-      .filter(({element,rect:r})=>r.width>(element.matches('.btn')?70:150)&&r.height>(element.matches('.btn')?24:120)&&r.top>165&&r.top<innerHeight-100&&center-(r.right-25)>45&&center-(r.right-25)<150&&Math.abs(r.top-(navRect.top+position(current)))<155&&Number(getComputedStyle(element).opacity)>.98)
+      .filter(({element,rect:r})=>r.width>(element.matches('.btn')?70:150)&&r.height>(element.matches('.btn')?24:120)&&r.top>160&&r.top<innerHeight-90&&center-(r.right-25)>40&&center-(r.right-25)<Math.min(280,innerWidth*.24)&&Number(getComputedStyle(element).opacity)>.98)
       .filter(({rect:r})=>!copy.some(c=>c.width>0&&c.height>0&&c.right>r.right-54&&c.left<r.right+4&&c.bottom>r.top-78&&c.top<r.top-4))
-      .sort((a,b)=>Math.abs(a.rect.top-(navRect.top+position(current)))-Math.abs(b.rect.top-(navRect.top+position(current))))[0];
+      .filter(({element})=>now-(anchorVisits.get(element)??-Infinity)>30000)
+      .sort((a,b)=>Number(anchorVisits.has(a.element))-Number(anchorVisits.has(b.element))||Number(a.element===lastAnchor)-Number(b.element===lastAnchor)||Math.abs(a.rect.top-(navRect.top+position(current)))-Math.abs(b.rect.top-(navRect.top+position(current))))[0];
   }
   function startIdle() {
-    if(trip||reaction||outing||wanted!==current||motion.matches||!desktop.matches||document.hidden) {scheduleIdle(['typing','surprise','media-hop'].includes(reviewAction)?600:1200);return;}
+    if(performance.now()<idleDeadline) {scheduleIdle();return;}
+    if(trip||reaction||outing||touching||wanted!==current||motion.matches||!desktop.matches||document.hidden) {scheduleIdle(250);return;}
     const now=performance.now(), anchor=mediaAnchor();
-    if(anchor && (reviewAction==='media-hop'||now-lastOuting>45000) && (reviewAction==='media-hop'||Math.random()<.28)) {
+    const sceneReview=['typing','surprise'].includes(reviewAction);
+    if(anchor && !sceneReview && (reviewAction==='media-hop'||!anchorVisits.has(anchor.element)||now-lastOuting>18000) && (anchor.element!==lastAnchor||previousScene!=='media-hop')) {
       const rect=nav.getBoundingClientRect();
       outing={element:anchor.element,start:now,x:anchor.rect.right-25-(rect.right-22),y:anchor.rect.top-rect.top+11};
-      lastOuting=now;actor.dataset.action='media-hop';
+      lastOuting=now;lastAnchor=anchor.element;anchorVisits.set(anchor.element,now);previousScene='media-hop';actor.dataset.action='media-hop';
       actor.dataset.anchor=anchor.element.matches('.shot')?'card':anchor.element.matches('.diagram-frame')?'graph':'button';
     } else {
       const name=reviewAction==='typing'?'typing':reviewAction==='surprise'?'surprise':previousScene==='typing'?'surprise':'typing';
@@ -218,7 +236,7 @@
   function wake(){if(!frame)frame=requestAnimationFrame(tick);}
   function target(index,manual=false){
     const now=performance.now(), changed=index!==wanted;
-    if(!changed&&!outing)return;
+    if(!changed)return;
     wanted=index;idleScene=null;reaction=null;
     const rough=now-fastScrollAt<650&&now>clickGrace;
     if(outing || (trip&&trip.to!==index&&(manual||rough||now-lastTargetChange<350))) hurry(index,rough);
@@ -226,10 +244,20 @@
     if(motion.matches||!desktop.matches)settle();else wake();scheduleIdle();
   }
   function activeTarget(){target(Math.max(0,links.findIndex(link=>link.classList.contains('active'))));}
-  new MutationObserver(()=>{clearTimeout(debounce);debounce=setTimeout(activeTarget,90);}).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
+  new MutationObserver(records=>{
+    if(!records.some(record=>links.includes(record.target)))return;
+    clearTimeout(debounce);debounce=setTimeout(activeTarget,90);
+  }).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
   nav.addEventListener('click',event=>{const index=links.indexOf(event.target.closest('a'));if(index>=0){clickGrace=performance.now()+1500;target(index,true);}});
-  addEventListener('scroll',()=>{const now=performance.now();if(Math.abs(scrollY-previousScroll)/Math.max(16,now-scrollTime)>1.6)fastScrollAt=now;previousScroll=scrollY;scrollTime=now;if(outing)hurry(wanted);},{passive:true});
-  addEventListener('resize',()=>{hit.disabled=!desktop.matches||innerHeight<461;if(outing)hurry(wanted);if(!trip)paint(position(current));wake();});
+  addEventListener('scroll',()=>{const now=performance.now();if(Math.abs(scrollY-previousScroll)/Math.max(16,now-scrollTime)>1.6)fastScrollAt=now;previousScroll=scrollY;scrollTime=now;browsingActivity();},{passive:true});
+  addEventListener('wheel',browsingActivity,{passive:true});
+  document.addEventListener('scroll',event=>{if(event.target!==document)browsingActivity();},{capture:true,passive:true});
+  addEventListener('touchstart',()=>{touching=true;browsingActivity();},{passive:true});
+  addEventListener('touchmove',browsingActivity,{passive:true});
+  for(const type of ['touchend','touchcancel'])addEventListener(type,event=>{touching=event.touches.length>0;browsingActivity();},{passive:true});
+  document.addEventListener('click',event=>{if(event.target.closest('a[href^="#"]'))browsingActivity();},{capture:true});
+  addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key)&&!event.target.closest('input,textarea,select,button,[contenteditable]'))browsingActivity();});
+  addEventListener('resize',()=>{hit.disabled=!desktop.matches||innerHeight<461;browsingActivity();if(!trip)paint(position(current));wake();});
   motion.addEventListener('change',()=>{settle();wake();scheduleIdle();});
   desktop.addEventListener('change',()=>{hit.disabled=!desktop.matches||innerHeight<461;settle();wake();scheduleIdle();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){settle();clearTimeout(idleTimer);}else {wake();scheduleIdle();}});
@@ -239,7 +267,7 @@
     const name=choices[Math.floor(Math.random()*choices.length)];lastReaction=name;
     status.textContent={swat:'He gives a playful swat.',kick:'He tries a little kick.',dodge:'He ducks playfully.',recoil:'You surprised him!'}[name];
     if(motion.matches){pose('wave');setTimeout(()=>pose('rest'),700);return;}
-    idleScene=null;reaction={name:trip||outing?'recoil':name,start:now,duration:680,facing:event.clientX&&event.clientX>nav.getBoundingClientRect().right-22?-1:1};
+    idleScene=null;idleDeadline=now+browsingIdleDelay;reaction={name:trip||outing?'recoil':name,start:now,duration:680,facing:event.clientX&&event.clientX>nav.getBoundingClientRect().right-22?-1:1};
     actor.dataset.reaction=name;wake();scheduleIdle();
   });
   let lookTime=0;
@@ -255,6 +283,6 @@
     actor.dataset.gaze=gaze;
   },{passive:true});
   Promise.all(Object.values(cache).map(img=>img.decode().catch(()=>{}))).then(()=>{
-    current=wanted=Math.max(0,links.findIndex(link=>link.classList.contains('active')));actor.classList.add('ready');paint(position(current));hit.disabled=!desktop.matches||innerHeight<461;wake();scheduleIdle(['typing','surprise','media-hop'].includes(reviewAction)?650:4200);
+    current=wanted=Math.max(0,links.findIndex(link=>link.classList.contains('active')));actor.classList.add('ready');actor.dataset.action='rest';paint(position(current));hit.disabled=!desktop.matches||innerHeight<461;wake();scheduleIdle();
   });
 })();
