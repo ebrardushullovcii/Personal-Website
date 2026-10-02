@@ -1591,7 +1591,7 @@ em {
 .companion-status { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dotnav:has(.orb-companion[data-action="media-hop"]) .dot-label { opacity: 0; }
 @media (min-width: 861px) {
-  main .wrap, footer .wrap { width: min(1180px, calc(100% - 176px)); margin-left: auto; margin-right: 120px; }
+  main .wrap, footer .wrap { width: min(1180px, calc(100% - 176px)); margin-inline: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
   .companion-sprite { will-change: auto; }
