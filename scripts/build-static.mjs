@@ -10,7 +10,7 @@ const dist = join(root, "dist");
 const version = new Date().toISOString().slice(0, 10).replaceAll("-", "") + "-" + Date.now().toString(36).slice(-4);
 const publicResume = "assets/resume/Ebrar-Dushullovci-Resume.pdf";
 const copiedDirectories = ["assets/fonts", "assets/icons", "assets/companion"];
-const copiedFiles = ["app.js", "companion.js", "assets/og.png"];
+const copiedFiles = ["app.js", "companion.js", "assets/og.png", "assets/icon-512.png"];
 
 if (existsSync(dist)) rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
@@ -51,6 +51,8 @@ for (const file of copiedFiles) {
   mkdirSync(dirname(join(dist, file)), { recursive: true });
   copyFileSync(join(root, file), join(dist, file));
 }
+// Older browsers and bookmarks request the conventional root favicon directly.
+copyFileSync(join(root, "assets/favicon.ico"), join(dist, "favicon.ico"));
 for (const directory of copiedDirectories) {
   if (existsSync(join(root, directory))) cpSync(join(root, directory), join(dist, directory), { recursive: true });
 }
@@ -79,7 +81,7 @@ const hashedNames = new Map();
 for (const asset of referencedAssets) {
   const source = join(root, asset);
   if (!existsSync(source)) throw new Error(`Referenced local asset does not exist: ${asset}`);
-  const keepName = asset === publicResume || copiedDirectories.some((directory) => asset.startsWith(`${directory}/`)) || asset === "assets/og.png" || asset === "assets/favicon.svg";
+  const keepName = asset === publicResume || copiedDirectories.some((directory) => asset.startsWith(`${directory}/`)) || asset === "assets/og.png";
   const hash = createHash("sha1").update(readFileSync(source)).digest("hex").slice(0, 8);
   const target = keepName ? asset : asset.replace(/(\.[a-z0-9]+)$/i, `.${hash}$1`);
   // Keep the shareable PDF filename, but refresh download links when its contents change.
