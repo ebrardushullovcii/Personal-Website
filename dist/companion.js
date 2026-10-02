@@ -43,14 +43,15 @@
   ];
   const used = new Map();
   const reviewAction = new URLSearchParams(location.search).get('companion-review');
-  let previous = '';
-  let impactTimer=0, impactEffect=null;
+  let previous = '', lastCompleted = '', travelId = 0;
+  const bags = {normal:[],catchup:[]};
+  let impactTimer=0, impactEffect=null, drag=null, toss=null, suppressClickUntil=0;
   let reaction=null, lastReaction='', lastClick=-Infinity, gaze='rest', idleScene=null, idleTimer=0, previousScene='', outing=null, lastOuting=-Infinity;
   // Four seconds of idle after a short scroll-settle window. Landings and
   // section observers never restart this clock; actual browsing input does.
   const browsingIdleDelay = 4200;
   let idleDeadline=performance.now()+browsingIdleDelay, touching=false, lastAnchor=null;
-  const anchorVisits=new WeakMap();
+  const anchorVisits=new WeakMap();let carryChecks=0;
   let drawn={y:0,x:0,pose:'rest'}, lastTargetChange=-Infinity, fastScrollAt=-Infinity, clickGrace=-Infinity, previousScroll=scrollY, scrollTime=performance.now();
   let current = 0, wanted = 0, trip = null, frame = 0, restUntil = 0, lastPose = '', idleStart = performance.now(), debounce = 0;
   const ease = t => t*t*(3-2*t);
@@ -60,21 +61,38 @@
     const rect = orb.getBoundingClientRect();
     return rect.top-nav.getBoundingClientRect().top+rect.height/2;
   };
-  function choose(now) {
-    if (reviewAction==='hurry' || (now-fastScrollAt<650 && now>clickGrace)) return {name:'hurry',duration:1200,rough:true};
-    const review = actions.find(action => action.name === (reviewAction==='tether-swing'?'rope-climb':reviewAction));
-    if (review) return review;
-    const distance = Math.abs(position(wanted)-position(current));
-    const eligible = actions.filter(a => a.name!==previous && (!a.short || distance<110) && (innerHeight>650 || !['edge-vault','balloon','rope-climb'].includes(a.name)));
-    let candidates = eligible.filter(a => now-(used.get(a.name)??-Infinity)>a.cooldown);
-    if (!candidates.length) candidates = eligible;
-    // A random first tour of the eligible moves makes variety discoverable;
-    // subsequent choices use the same weighted pool and cooldowns.
-    const unseen=candidates.filter(action=>!used.has(action.name));if(unseen.length)candidates=unseen;
-    const sample = new Uint32Array(1); crypto.getRandomValues(sample);
-    let ticket = sample[0]/4294967296*candidates.reduce((sum,a)=>sum+a.weight,0);
-    const chosen = candidates.find(a => (ticket-=a.weight)<0)??candidates[candidates.length-1];
-    used.set(chosen.name,now); previous=chosen.name; return chosen;
+  function shuffle(pool) {
+    // Weighted order, one occurrence per bag: weights cannot starve a move.
+    return pool.map(action=>{const sample=new Uint32Array(1);crypto.getRandomValues(sample);return {action,key:-Math.log((sample[0]+1)/4294967297)/action.weight};}).sort((a,b)=>a.key-b.key).map(entry=>entry.action.name);
+  }
+  function choose(now,catchup=false,index=wanted,startY=position(current),physicalEntry=false) {
+    catchup ||= reviewAction==='hurry' || (now-fastScrollAt<650 && now>clickGrace);
+    const review=actions.find(action=>action.name===(reviewAction==='tether-swing'?'rope-climb':reviewAction));
+    if(review && !catchup)return {...review,mode:'normal'};
+    const distance=Math.abs(position(index)-startY), mode=catchup?'catchup':'normal';
+    const safe=catchup?actions.filter(a=>['springboard','wings','paper-plane','portal','orb-wrap'].includes(a.name)&&(!physicalEntry||a.name!=='portal')):actions;
+    let eligible=safe.filter(a=>(!a.short||distance<110||catchup&&a.name==='springboard')&&(innerHeight>650||!['edge-vault','balloon','rope-climb'].includes(a.name)));
+    // Remember starts, including cancelled trips, and the last completed move.
+    // Relax cooldowns before ever relaxing the immediate-repeat rule.
+    const fresh=eligible.filter(a=>a.name!==previous&&a.name!==lastCompleted);
+    if(fresh.length)eligible=fresh;
+    else if(eligible.some(a=>a.name!==previous))eligible=eligible.filter(a=>a.name!==previous);
+    let pending=bags[mode].filter(name=>eligible.some(a=>a.name===name));
+    if(!pending.length){bags[mode]=shuffle(safe);pending=bags[mode].filter(name=>eligible.some(a=>a.name===name));}
+    const ready=pending.filter(name=>now-(used.get(name)??-Infinity)>actions.find(a=>a.name===name).cooldown);
+    const name=(ready.length?ready:pending)[0];bags[mode].splice(bags[mode].indexOf(name),1);
+    const chosen=actions.find(a=>a.name===name);
+    return {...chosen,mode,duration:catchup?({springboard:760,wings:820,'paper-plane':850,portal:940,'orb-wrap':800}[name]):chosen.duration};
+  }
+  function travelEvent(phase,reason='') {
+    if(!trip)return;
+    actor.dispatchEvent(new CustomEvent('companiontravel',{bubbles:true,detail:{id:trip.id,phase,action:trip.action.name,mode:trip.action.mode,from:trip.from,to:trip.to,elapsed:Math.round(performance.now()-trip.start),reason,origin:trip.origin??'orb'}}));
+  }
+  function cancelTrip(reason) {if(trip){travelEvent('cancelled',reason);trip=null;}}
+  function beginTrip(index,action,startY,startX=0) {
+    cancelTrip('retarget');const now=performance.now();
+    trip={id:++travelId,from:current,to:index,start:now,startY,startX,action,executed:false};
+    previous=action.name;used.set(action.name,now);actor.dataset.action=action.name;actor.dataset.travelMode=action.mode;travelEvent('selected');
   }
   function pose(name) {
     actor.classList.toggle('companion-looking',name==='rest'&&!motion.matches&&desktop.matches);
@@ -97,15 +115,14 @@
     links.forEach(link => {const dot=link.querySelector('.dot'); dot.style.removeProperty('transform'); dot.style.removeProperty('transition');});
   }
   function settle() {
-    clearImpact();
-    cancelAnimationFrame(frame); frame=0; trip=null; reaction=null; idleScene=null; outing=null; current=wanted; clearProps(); paint(position(current)); actor.dataset.action='rest';
+    releaseDrag();toss=null;clearImpact();
+    cancelAnimationFrame(frame); frame=0; cancelTrip('settle'); reaction=null; idleScene=null; outing=null; current=wanted; clearProps(); paint(position(current)); actor.dataset.action='rest';
   }
-  function hurry(index,rough=false) {
+  function hurry(index) {
     clearImpact();
-    outing=null;idleScene=null;reaction=null;
+    toss=null;outing=null;idleScene=null;reaction=null;
     actor.dataset.anchor='';
-    trip={from:current,to:index,start:performance.now(),startY:drawn.y,startX:drawn.x,action:{name:'hurry',duration:rough?1200:780,rough}};
-    actor.dataset.action='hurry';wake();
+    beginTrip(index,choose(performance.now(),true,index,drawn.y),drawn.y,drawn.x);wake();
   }
   function scheduleIdle(delay) {
     clearTimeout(idleTimer);
@@ -113,10 +130,15 @@
     if(motion.matches||!desktop.matches||!hover.matches||!actor.classList.contains('ready')) return;
     idleTimer=setTimeout(startIdle,Math.max(0,idleDeadline-performance.now()));
   }
-  function browsingActivity() {
+  function browsingActivity(allowCarry=false) {
     clearImpact();
     idleDeadline=performance.now()+browsingIdleDelay;
-    if(outing) hurry(wanted);
+    if(outing && outing.mode!=='carry') {
+      const elapsed=performance.now()-outing.start;
+      if(allowCarry===true&&elapsed>=640&&elapsed<1140&&++carryChecks%2===1){
+        outing.mode='carry';outing.carriedAt=performance.now();actor.dataset.action='page-perch';
+      }else hurry(wanted);
+    }
     if(idleScene) {
       idleScene=null;clearProps();actor.dataset.action='rest';paint(position(current));wake();
     }
@@ -154,19 +176,19 @@
     const endY=release?mix(hy,anchor-y,ease(release)):hy;
     tether.setAttribute('d',`M -12 ${anchor-y} L ${hx} ${endY}`+(release?'':` M ${hx} ${hy} Q ${hx+2*Math.sin(q*Math.PI*4)} ${mix(hy,b-y+14,.6)} -12 ${b-y+14}`));
   }
-  function portalTravel(a,b,q) {
+  function portalTravel(a,b,q,startX=0) {
     let x,y,name;
-    if(q<.34){const p=ease(q/.34);x=-92*p;y=a;name=p<.3?'grab':'tuck';actor.dataset.portalPhase='enter';}
-    else if(q<.48){x=-92;y=a;name='tuck';sprite.style.opacity='0';actor.dataset.portalPhase='inside';}
+    if(q<.34){const p=ease(q/.34);x=startX-92*p;y=a;name=p<.3?'grab':'tuck';actor.dataset.portalPhase='enter';}
+    else if(q<.48){x=startX-92;y=a;name='tuck';sprite.style.opacity='0';actor.dataset.portalPhase='inside';}
     else{const p=ease(Math.min(1,(q-.48)/.45));x=-76*(1-p);y=b;name=p<.45?'launch':p<.84?'land':'rest';actor.dataset.portalPhase='exit';}
-    paint(y,x,0,1,1,name);sprite.style.clipPath=`inset(0 0 0 ${(q<.48?2:18)-x}px)`;hit.style.visibility='hidden';
+    paint(y,x,0,1,1,name);sprite.style.clipPath=`inset(0 0 0 ${(q<.48?2+startX:18)-x}px)`;hit.style.visibility='hidden';
   }
-  function planeTravel(a,b,q) {
+  function planeTravel(a,b,q,startX=0) {
     let x,y,angle=0,name,alpha=1,peel=0;
     if(q<.16){x=0;y=a;name='compress';alpha=ease(q/.16);}
     else if(q<.78){const p=(q-.16)/.62;x=-30*Math.sin(p*Math.PI);y=mix(a,b,ease(p))-8*Math.sin(p*Math.PI);angle=-5*Math.sin(p*Math.PI*2);name=p<.15?'grab':p<.4?'rest':p<.58?'wave':p<.82?'rest':'crouch';}
     else{const p=(q-.78)/.22;x=0;y=b-10*Math.sin(p*Math.PI);name=p<.70?'launch':'land';alpha=1-p;peel=p;}
-    paint(y,x,angle,1,1,name);plane.style.opacity=String(alpha);plane.style.transform=`translate(${x-35*peel}px,${-40*peel}px) rotate(${angle-15*peel}deg) scale(${1-.35*peel})`;
+    x+=startX*(1-ease(q));paint(y,x,angle,1,1,name);plane.style.opacity=String(alpha);plane.style.transform=`translate(${x-35*peel}px,${-40*peel}px) rotate(${angle-15*peel}deg) scale(${1-.35*peel})`;
   }
   function starTravel(a,b,q) {
     const xs=[0,-18,-30,0],phase=Math.min(2.99999,q*3),step=Math.floor(phase),part=phase-step;
@@ -177,9 +199,12 @@
     else if(part<.80){const p=(part-.17)/.63;paint(mix(start,end,ease(p)),mix(xs[step],xs[step+1],ease(p)),-3*Math.sin(p*Math.PI),1,1,p<.25?'launch':p<.7?'tuck':'launch',10*Math.sin(p*Math.PI));}
     else paint(end,xs[step+1],0,1,1,part<.93?'land':'rest');
   }
+  function copyRects() {
+    return [...document.querySelectorAll('main h1,main h2,main h3,main p')].flatMap(element=>{const range=document.createRange();range.selectNodeContents(element);return [...range.getClientRects()];});
+  }
   function mediaAnchor() {
     const now=performance.now(), navRect=nav.getBoundingClientRect(), center=navRect.right-22;
-    const copy=[...document.querySelectorAll('main h1,main h2,main h3,main p')].map(el=>el.getBoundingClientRect());
+    const copy=copyRects();
     return [...document.querySelectorAll('.shot,main .diagram-frame,main .btn')].map(element=>({element,rect:element.getBoundingClientRect()}))
       .filter(({element,rect:r})=>r.width>(element.matches('.btn')?70:150)&&r.height>(element.matches('.btn')?24:120)&&r.top>160&&r.top<innerHeight-90&&center-(r.right-25)>40&&center-(r.right-25)<Math.min(280,innerWidth*.24)&&Number(getComputedStyle(element).opacity)>.98)
       .filter(({rect:r})=>!copy.some(c=>c.width>0&&c.height>0&&c.right>r.right-54&&c.left<r.right+4&&c.bottom>r.top-78&&c.top<r.top-4))
@@ -188,7 +213,7 @@
   }
   function startIdle() {
     if(performance.now()<idleDeadline) {scheduleIdle();return;}
-    if(trip||reaction||outing||touching||wanted!==current||motion.matches||!desktop.matches||document.hidden) {scheduleIdle(250);return;}
+    if(trip||reaction||outing||drag||toss||touching||wanted!==current||motion.matches||!desktop.matches||document.hidden) {scheduleIdle(250);return;}
     const now=performance.now(), anchor=mediaAnchor();
     const sceneReview=['typing','surprise'].includes(reviewAction);
     if(anchor && !sceneReview && (reviewAction==='media-hop'||!anchorVisits.has(anchor.element)||now-lastOuting>18000) && (anchor.element!==lastAnchor||previousScene!=='media-hop')) {
@@ -204,12 +229,27 @@
   }
   function tick(now) {
     if(motion.matches || !desktop.matches || document.hidden) {settle();return;}
+    if(drag?.active){paint(drag.y-nav.getBoundingClientRect().top,drag.x-(nav.getBoundingClientRect().right-22),drag.angle,1,1,'grab');frame=requestAnimationFrame(tick);return;}
+    if(toss){animateToss(now);frame=requestAnimationFrame(tick);return;}
     if(reaction && now-reaction.start>=reaction.duration) {reaction=null;actor.dataset.reaction='';}
     if(outing) {
       const r=outing.element.getBoundingClientRect(), n=nav.getBoundingClientRect();
       const x=r.right-25-(n.right-22), y=r.top-n.top+11;
-      if(Math.abs(x-outing.x)>3||Math.abs(y-outing.y)>3||r.top<145||r.top>innerHeight-90) hurry(wanted);
-      else {
+      if(outing.mode==='carry') {
+        // The real element's viewport coordinates carry the perch with scroll.
+        // At most 900ms here, then enter from the edge it crossed; navigation
+        // keeps updating wanted throughout this short intentional absence.
+        paint(y,x,0,1,1,'rest');
+        const outside=r.top+11<0?-1:r.top-78>innerHeight?1:0;
+        if(outside!==outing.exitSide){outing.offscreenAt=outside?now:0;outing.exitSide=outside;}
+        if(now-outing.carriedAt>=900||outing.offscreenAt&&now-outing.offscreenAt>=180){
+          const edgeY=outside?(outside<0?-n.top-20:innerHeight-n.top+94):y;
+          const startX=outside?Math.max(-80,Math.min(20,x)):x;outing=null;actor.dataset.anchor='';
+          beginTrip(wanted,choose(now,true,wanted,edgeY,Boolean(outside)),edgeY,startX);trip.origin=outside?'viewport-edge':'page-element';
+        }else{frame=requestAnimationFrame(tick);return;}
+      }
+      else if(Math.abs(x-outing.x)>3||Math.abs(y-outing.y)>3||r.top<145||r.top>innerHeight-90) hurry(wanted);
+      else if(outing) {
         const elapsed=now-outing.start, q=elapsed<640?elapsed/640:elapsed>1140?1-(elapsed-1140)/640:1;
         const progress=ease(Math.max(0,Math.min(1,q)));
         paint(mix(position(current),y,progress),x*progress,-4*Math.sin(progress*Math.PI),1,1,elapsed>640&&elapsed<1140?'rest':progress>.85?'land':progress<.2?'launch':'tuck',22*Math.sin(progress*Math.PI));
@@ -229,22 +269,31 @@
       frame=requestAnimationFrame(tick);return;
     }
     if(!trip && wanted!==current && now>=restUntil) {
-      trip={from:current,to:wanted,start:now,action:choose(now)}; actor.dataset.action=trip.action.name;
+      beginTrip(wanted,choose(now));
     }
     if(trip) {
+      if(!trip.executed){trip.executed=true;travelEvent('executed');}
       const {from,to,start,action}=trip;
       const t=Math.min(1,(now-start)/action.duration), a=trip.startY??position(from), b=position(to), down=b>a;
       clearProps();
       if(action.name==='portal'){
         const open=t<.13?ease(t/.13):t>.86?1-ease((t-.86)/.14):1;
         portals.style.opacity=String(open);portals.style.setProperty('--portal-open',String(open));
-        portalRings[0].style.top=`${a-45}px`;portalRings[1].style.top=`${b-45}px`;
+        portalRings[0].style.right=`${76-(trip.startX??0)}px`;portalRings[0].style.top=`${a-45}px`;portalRings[1].style.top=`${b-45}px`;
       }
       const source=links[from].querySelector('.dot');
-      if(action.name==='hurry') {
-        const airEnd=action.rough?.58:.68;
-        if(t<airEnd) {const q=t/airEnd;paint(mix(a,b,ease(q)),(trip.startX??0)*(1-ease(q)),0,1,1,q<.12?drawn.pose:q<.65?'tuck':'launch',12*Math.sin(Math.PI*q));}
-        else {const q=(t-airEnd)/(1-airEnd);paint(b,0,0,1,1,action.rough?(q<.52?'ouch':q<.86?'recover':'rest'):(q<.5?'land':'rest'),0,q<.25?1-q/.25:0);}
+      if(action.mode==='catchup') {
+        // Existing moves, shortened for catch-up; continue from the drawn pose
+        // and position rather than snapping back to the previous orb.
+        const q=ease(t), x=(trip.startX??0)*(1-q);
+        if(t<.82){
+          const p=t/.82,arc=Math.sin(p*Math.PI);
+          if(action.name==='portal')portalTravel(a,b,p,trip.startX??0);
+          else if(action.name==='paper-plane')planeTravel(a,b,p,trip.startX??0);
+          else if(action.name==='wings')paint(mix(a,b,ease(p)),x-14*arc,-3*arc,1,1,p<.12?'launch':p>.9?'land':'wings',6*arc);
+          else if(action.name==='orb-wrap'){actor.dataset.depth=p>.15&&p<.45?'behind':'front';paint(mix(a,b,ease(p)),x+14*Math.sin(p*Math.PI*2),0,1,1,p<.3?'push':p>.7?'land':'launch',5*arc);}
+          else paint(mix(a,b,ease(p)),x-8*arc,-3*arc,1,1,p<.2?'launch':p<.6?'tuck':'land',9*arc);
+        }else{const p=(t-.82)/.18;paint(b,0,0,1+.05*Math.sin(p*Math.PI),1-.05*Math.sin(p*Math.PI),p<.6?'land':'rest');}
       } else if(t<.13) {
         const q=ease(t/.13);
         paint(a,0,-3*q,1+.08*q,1-.08*q,q<.15?'rest':'crouch');
@@ -302,7 +351,7 @@
           balloon.style.transform=`translate(${8*release}px,${-50*release}px) scale(${1-.2*release})`;
         }
       }
-      if(t===1) {current=to;trip=null;clearProps();actor.dataset.action='rest';restUntil=now+280;idleStart=now;paint(position(current));scheduleIdle();}
+      if(t===1) {travelEvent('completed');lastCompleted=action.name;current=to;trip=null;clearProps();actor.dataset.action='rest';restUntil=now+280;idleStart=now;paint(position(current));scheduleIdle();}
     } else {
       const idle=now-idleStart;
       paint(position(current));
@@ -317,7 +366,9 @@
     if(!changed)return;
     wanted=index;idleScene=null;reaction=null;
     const rough=now-fastScrollAt<650&&now>clickGrace;
-    if(outing || (trip&&trip.to!==index&&(manual||rough||now-lastTargetChange<350))) hurry(index,rough);
+    if(drag?.active||toss){lastTargetChange=now;scheduleIdle();return;}
+    if(outing?.mode==='carry'){lastTargetChange=now;scheduleIdle();return;}
+    if(outing || (trip&&trip.to!==index&&(manual||rough||now-lastTargetChange<350))) hurry(index);
     lastTargetChange=now;
     if(motion.matches||!desktop.matches)settle();else wake();scheduleIdle();
   }
@@ -327,20 +378,78 @@
     clearTimeout(debounce);debounce=setTimeout(activeTarget,90);
   }).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
   nav.addEventListener('click',event=>{const index=links.indexOf(event.target.closest('a'));if(index>=0){clickGrace=performance.now()+1500;target(index,true);}});
-  addEventListener('scroll',()=>{const now=performance.now();if(Math.abs(scrollY-previousScroll)/Math.max(16,now-scrollTime)>1.6)fastScrollAt=now;previousScroll=scrollY;scrollTime=now;browsingActivity();},{passive:true});
-  addEventListener('wheel',()=>{clickGrace=-Infinity;browsingActivity();},{passive:true});
+  addEventListener('scroll',()=>{const now=performance.now();if(Math.abs(scrollY-previousScroll)/Math.max(16,now-scrollTime)>1.6)fastScrollAt=now;previousScroll=scrollY;scrollTime=now;browsingActivity(now-fastScrollAt<650);},{passive:true});
+  addEventListener('wheel',event=>{clickGrace=-Infinity;browsingActivity(Math.abs(event.deltaY)>100);},{passive:true});
   document.addEventListener('scroll',event=>{if(event.target!==document)browsingActivity();},{capture:true,passive:true});
   addEventListener('touchstart',()=>{touching=true;clickGrace=-Infinity;browsingActivity();},{passive:true});
   addEventListener('touchmove',browsingActivity,{passive:true});
   for(const type of ['touchend','touchcancel'])addEventListener(type,event=>{touching=event.touches.length>0;browsingActivity();},{passive:true});
   document.addEventListener('click',event=>{if(event.target.closest('a[href^="#"]'))browsingActivity();},{capture:true});
   addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key)&&!event.target.closest('input,textarea,select,button,[contenteditable]')){clickGrace=-Infinity;browsingActivity();}});
-  addEventListener('resize',()=>{hit.disabled=!desktop.matches||innerHeight<461;browsingActivity();if(trip)hurry(wanted);else paint(position(current));wake();});
+  addEventListener('resize',()=>{hit.disabled=!desktop.matches||innerHeight<461;if(releaseDrag()?.active)suppressClickUntil=performance.now()+600;toss=null;browsingActivity();if(trip||outing?.mode==='carry'||actor.dataset.action==='drag'||actor.dataset.action==='toss'||actor.dataset.action==='drop-perch')hurry(wanted);else paint(position(current));wake();});
   motion.addEventListener('change',()=>{settle();wake();scheduleIdle();});
   desktop.addEventListener('change',()=>{hit.disabled=!desktop.matches||innerHeight<461;settle();wake();scheduleIdle();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){settle();clearTimeout(idleTimer);}else {wake();scheduleIdle();}});
+  const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+  function releaseDrag() {
+    const old=drag;drag=null;
+    if(old&&hit.hasPointerCapture(old.id))hit.releasePointerCapture(old.id);
+    hit.style.removeProperty('cursor');return old;
+  }
+  function dropAnchor(x,y) {
+    const copy=copyRects();
+    return [...document.querySelectorAll('.shot,main .diagram-frame,main .btn')].map(element=>{
+      const r=element.getBoundingClientRect(),hang=element.matches('.btn'),grip=clamp(x,r.left+24,r.right-24),px=hang?grip-30.2:grip,py=hang?r.bottom+75.8:r.top+11;
+      return {element,x:px,y:py,hang,offset:px-r.left,distance:Math.hypot(x-px,y-py),rect:r};
+    }).filter(a=>a.rect.width>70&&a.rect.height>24&&a.rect.top>110&&a.rect.top<innerHeight-65&&a.distance<145&&Number(getComputedStyle(a.element).opacity)>.98)
+      .filter(a=>!copy.some(c=>c.width&&c.height&&c.right>a.x-30&&c.left<a.x+30&&c.bottom>a.y-80&&c.top<a.y-5)).sort((a,b)=>a.distance-b.distance)[0];
+  }
+  function returnFromToss(side=0) {
+    const n=nav.getBoundingClientRect(),y=side?(side<0?-n.top-20:innerHeight-n.top+94):drawn.y,x=side?clamp(drawn.x,-80,20):drawn.x;
+    toss=null;actor.dataset.anchor='';beginTrip(wanted,choose(performance.now(),true,wanted,y,Boolean(side)),y,x);wake();
+  }
+  function animateToss(now) {
+    clearProps();const n=nav.getBoundingClientRect(),center=n.right-22;
+    if(toss.stage==='flight'){
+      const q=Math.min(1,(now-toss.start)/toss.duration),p=ease(q),arc=Math.sin(q*Math.PI);
+      paint(mix(toss.from.y,toss.to.y,p)-toss.lift*arc-n.top,mix(toss.from.x,toss.to.x,p)-center,toss.angle*arc,1,1,q<.15?'release':q<.55?'launch':q<.85?'land':'recover');
+      if(q===1){toss.stage='perch';toss.start=now;actor.dataset.action='drop-perch';actor.dataset.anchor=toss.anchor?.element.matches('.btn')?'button':toss.anchor?.element.matches('.shot')?'card':toss.anchor?'graph':'side';}
+    }else{
+      let x=toss.to.x,y=toss.to.y;
+      if(toss.anchor){const r=toss.anchor.element.getBoundingClientRect();x=r.left+clamp(toss.anchor.offset,toss.anchor.hang?-6.2:24,r.width-(toss.anchor.hang?54.2:24));y=toss.anchor.hang?r.bottom+75.8:r.top+11;}
+      paint(y-n.top,x-center,0,1,1,toss.anchor?.hang?'grab':now-toss.start<140?'recover':'rest');
+      const side=y<0?-1:y-78>innerHeight?1:0;
+      if(side||now-toss.start>(toss.anchor?520:160))returnFromToss(side);
+    }
+  }
+  function describeControls(){hit.title=motion.matches?'Click or press Space to play.':'Click to play. Drag to pick him up; release to toss.';}
+  describeControls();motion.addEventListener('change',describeControls);
+  hit.addEventListener('pointerdown',event=>{
+    if(!event.isPrimary||event.button!==0||motion.matches||!desktop.matches||hit.disabled)return;
+    const n=nav.getBoundingClientRect();drag={id:event.pointerId,originX:event.clientX,originY:event.clientY,fromX:n.right-22+drawn.x,fromY:n.top+drawn.y,x:n.right-22+drawn.x,y:n.top+drawn.y,angle:0,active:false,samples:[{x:event.clientX,y:event.clientY,time:performance.now()}]};
+  });
+  addEventListener('pointermove',event=>{
+    if(!drag||event.pointerId!==drag.id)return;
+    const dx=event.clientX-drag.originX,dy=event.clientY-drag.originY;
+    if(!drag.active&&Math.hypot(dx,dy)>6){drag.active=true;hit.setPointerCapture(drag.id);cancelTrip('drag');outing=null;toss=null;idleScene=null;reaction=null;clearProps();clearImpact();clearTimeout(idleTimer);actor.dataset.action='drag';hit.style.cursor='grabbing';status.textContent='Picked up. Release to toss him.';}
+    if(!drag.active)return;event.preventDefault();
+    drag.x=clamp(drag.fromX+dx,-70,innerWidth+70);drag.y=clamp(drag.fromY+dy,20,innerHeight+90);drag.angle=clamp(dx*.025,-9,9);
+    const now=performance.now();drag.samples.push({x:event.clientX,y:event.clientY,time:now});drag.samples=drag.samples.filter(sample=>now-sample.time<120);wake();
+  },{passive:false});
+  addEventListener('pointerup',event=>{
+    if(!drag||event.pointerId!==drag.id)return;const old=releaseDrag();if(!old.active)return;
+    event.preventDefault();suppressClickUntil=performance.now()+600;
+    const first=old.samples[0],last=old.samples[old.samples.length-1],dt=Math.max(16,last.time-first.time);
+    const damping=clamp(1-(performance.now()-last.time)/100,0,1);
+    const vx=clamp((last.x-first.x)/dt,-1.1,1.1)*damping,vy=clamp((last.y-first.y)/dt,-.9,.9)*damping,strength=Math.hypot(vx,vy);
+    const x=clamp(old.x+vx*210,-45,innerWidth+45),y=clamp(old.y+vy*160+Math.min(30,strength*25),90,innerHeight+94),anchor=dropAnchor(x,y);
+    toss={from:{x:old.x,y:old.y},to:anchor?{x:anchor.x,y:anchor.y}:{x,y},anchor,start:performance.now(),duration:480,lift:12+Math.min(25,strength*20),angle:clamp(vx*12,-12,12),stage:'flight'};
+    actor.dataset.action='toss';status.textContent=anchor?.hang?'He holds the button edge, then returns.':anchor?'He lands for a moment, then returns.':'He tumbles back to his orb.';idleDeadline=performance.now()+browsingIdleDelay;wake();scheduleIdle();
+  },{passive:false});
+  function cancelPickup(){const old=releaseDrag();if(old?.active){suppressClickUntil=performance.now()+600;idleDeadline=performance.now()+browsingIdleDelay;if(motion.matches||!desktop.matches)settle();else {hurry(wanted);scheduleIdle();}}}
+  addEventListener('pointercancel',cancelPickup);hit.addEventListener('lostpointercapture',()=>{if(drag?.active)cancelPickup();});addEventListener('blur',cancelPickup);
   hit.addEventListener('click',event=>{
-    event.stopPropagation();const now=performance.now();if(now-lastClick<850)return;lastClick=now;
+    event.stopPropagation();const now=performance.now();if(now<suppressClickUntil){event.preventDefault();return;}if(now-lastClick<850)return;lastClick=now;
     const choices=['swat','kick','dodge','recoil'].filter(name=>name!==lastReaction);
     const name=choices[Math.floor(Math.random()*choices.length)];lastReaction=name;
     const box=hit.getBoundingClientRect(),facing=event.detail&&event.clientX>box.left+box.width/2?-1:1;

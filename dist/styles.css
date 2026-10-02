@@ -1586,7 +1586,7 @@ em {
 .companion-edge { position: absolute; left: 37px; top: -66px; width: 10px; height: 28px; border-right: 2px solid #d1c8b0; border-top: 2px solid #d1c8b0; border-radius: 0 3px 0 0; opacity: 0; }
 .companion-balloon { position: absolute; width: 13px; height: 17px; left: 7px; bottom: 83px; border-radius: 50% 50% 46% 46%; background: radial-gradient(circle at 30% 25%, #fff4c7, #e9b44e 50%, #b37c2b); opacity: 0; }
 .companion-balloon::after { content: ''; position: absolute; top: 17px; left: 6px; width: 1px; height: 12px; background: #d4ac64; }
-.companion-hit { position: absolute; left: -14px; bottom: 14px; width: 28px; height: 56px; padding: 0; border: 0; background: transparent; border-radius: 45% 45% 30% 30%; pointer-events: auto; cursor: pointer; transform-origin: 50% 100%; }
+.companion-hit { position: absolute; left: -14px; bottom: 14px; width: 28px; height: 56px; padding: 0; border: 0; background: transparent; border-radius: 45% 45% 30% 30%; pointer-events: auto; cursor: grab; touch-action: none; transform-origin: 50% 100%; }
 .companion-hit:focus-visible { outline: 2px dashed #e7bf73; outline-offset: 4px; }
 .companion-status { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dotnav:has(.orb-companion[data-action="media-hop"]) .dot-label { opacity: 0; }
