@@ -81,6 +81,9 @@ export const workProjects = [
   {
     id: "orderific",
     index: "01",
+    name: "Orderific",
+    url: "https://orderific.com",
+    mark: "/assets/projects/orderific-mark.png",
     tag: "Real-time operations",
     title: "Restaurant ordering and kitchen platform",
     summary:
@@ -253,7 +256,7 @@ export const personalProjects = [
   {
     id: "clipvault",
     name: "ClipVault",
-    status: "Shipped · v1.7.6",
+    status: "Shipped · v1.8.0",
     url: "https://getclipvault.netlify.app",
     repo: "https://github.com/ebrardushullovcii/ClipVault",
     primary: { label: "Website", href: "https://getclipvault.netlify.app" },
@@ -267,7 +270,7 @@ export const personalProjects = [
     points: [
       "C++ capture backend on libobs with NVENC hardware encoding and x264 fallback.",
       "Electron and React editor with a clip library, trimming, tagging, favourites, and export.",
-      "Fifteen public releases with installer and portable builds.",
+      "Sixteen public releases with installer and portable builds.",
     ],
     stack: "C++ · libobs · Electron · React · FFmpeg",
   },
@@ -315,6 +318,22 @@ export const personalProjects = [
   },
 ];
 
+// Hero collage, front to back. Orderific (my day-to-day product work) leads; ClipVault sits at the back.
+export const heroShots = [
+  {
+    id: "orderific",
+    name: "Orderific",
+    status: "Live in restaurants",
+    url: "https://orderific.com",
+    image: "/assets/projects/orderific.jpg",
+    imageAlt: "Orderific restaurant dashboard with sales progress, new customers, weekly stats and latest orders, from Orderific's public site",
+    pan: true,
+  },
+  ...["nordri", "showtracker"].map((id) => personalProjects.find((project) => project.id === id)),
+  // Tucked behind the others, so only a narrow band shows: label it with the version alone.
+  ((clipvault) => ({ ...clipvault, status: clipvault.status.split(" · ").pop() }))(personalProjects.find((project) => project.id === "clipvault")),
+];
+
 export const smallProjects = [
   {
     name: "global-agent-skills",
@@ -339,7 +358,7 @@ export const experience = [
     mode: "Full-time · Remote",
     current: true,
     summary:
-      "Primary engineer on a restaurant operations platform used daily by dozens of restaurants, then lead on the QA automation platform and the team's AI tooling. I own features from API design to the screens staff use during service.",
+      "Primary engineer on Orderific, a restaurant operations platform used daily by dozens of restaurants, then lead on the QA automation platform and the team's AI tooling. I own features from API design to the screens staff use during service.",
     points: [
       {
         result: "Kitchen tickets in under a second, 150+ orders an hour at peak.",
@@ -501,8 +520,8 @@ export const milestones = [
   {
     date: "2026-01",
     label: "ClipVault",
-    status: "Shipped · v1.7.6",
-    detail: "Windows game-clipping tool: a C++ capture backend on libobs with an Electron and React editor. Fifteen public releases so far.",
+    status: "Shipped · v1.8.0",
+    detail: "Windows game-clipping tool: a C++ capture backend on libobs with an Electron and React editor. Sixteen public releases so far.",
     kind: "project",
     url: "https://getclipvault.netlify.app",
     image: "/assets/projects/clipvault.jpg",

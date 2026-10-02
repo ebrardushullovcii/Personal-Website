@@ -564,6 +564,7 @@ em {
 .shot-cap {
   z-index: 1;
   position: absolute;
+  white-space: nowrap;
   left: 10px;
   bottom: 10px;
   display: inline-flex;
@@ -585,37 +586,80 @@ em {
   color: var(--ink-3);
 }
 
+/* Four slots, front to back: 1 is the lead product (left, largest); the right side is a
+   column with 3 on top, 2 below, and 4 tucked behind in the gap between them.
+   Every card stays in front of the scene plane (z > 0): anything behind it is
+   hit-tested as the scene itself and can never receive hover. */
 .shot-1 {
   left: 0;
-  top: 12%;
-  width: 66%;
-  transform: translate3d(0, var(--py, 0px), 80px) rotateY(4deg);
+  top: 18%;
+  width: 67%;
+  transform: translate3d(0, var(--py, 0px), 150px) rotateY(4deg);
 }
 
-/* Every card stays in front of the scene plane (z > 0): anything behind it is
-   hit-tested as the scene itself and can never receive hover. */
 .shot-2 {
-  right: 0;
-  top: 0;
-  width: 54%;
-  transform: translate3d(0, var(--py, 0px), 20px) rotateY(-6deg);
-}
-
-.shot-2 .shot-card {
-  filter: brightness(0.9);
+  right: 4%;
+  bottom: -8%;
+  width: 46%;
+  transform: translate3d(0, var(--py, 0px), 100px) rotateY(-4deg);
 }
 
 .shot-3 {
-  right: 4%;
-  bottom: -4%;
-  width: 50%;
-  transform: translate3d(0, var(--py, 0px), 140px) rotateY(-3deg);
+  right: 6%;
+  top: 0;
+  width: 46%;
+  transform: translate3d(0, var(--py, 0px), 60px) rotateY(-6deg);
+}
+
+.shot-3 .shot-card {
+  filter: brightness(0.9);
+}
+
+.shot-4 {
+  right: -2%;
+  top: 31%;
+  width: 44%;
+  transform: translate3d(0, var(--py, 0px), 12px) rotateY(-8deg);
+}
+
+.shot-4 .shot-card {
+  filter: brightness(0.72);
+}
+
+/* Between the stacked tablet layout and wide desktops the cards are too narrow for a status. */
+@media (min-width: 861px) and (max-width: 1239px) {
+  .shot-cap .dim {
+    display: none;
+  }
+}
+
+/* The lead card is a light product among dark ones: take the edge off its glare until hovered. */
+.shot-1 .shot-card {
+  filter: brightness(0.94);
+}
+
+/* The lead card is a tall dashboard: show its top, and scroll it on hover. */
+.shot-pan img {
+  object-position: 50% 0;
+  transition: object-position 5s cubic-bezier(0.45, 0, 0.25, 1);
+}
+
+.shot-pan:hover img {
+  object-position: 50% 100%;
 }
 
 @media (min-width: 861px) {
-  .shot-2 .shot-cap {
+  .shot-3 .shot-cap {
     bottom: auto;
     top: 10px;
+  }
+  /* Only the middle band of the tucked-in card shows, so its label sits there. */
+  .shot-4 .shot-cap {
+    left: auto;
+    right: 10px;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
@@ -632,15 +676,19 @@ em {
 
 /* Each card straightens and comes forward past its neighbours from wherever it sits in depth. */
 .collage .shot-1:hover .shot-card {
-  transform: translate3d(0, -6px, 120px) rotateY(-4deg);
+  transform: translate3d(0, -6px, 60px) rotateY(-4deg);
 }
 
 .collage .shot-2:hover .shot-card {
-  transform: translate3d(0, -6px, 180px) rotateY(6deg);
+  transform: translate3d(0, -6px, 130px) rotateY(4deg);
 }
 
 .collage .shot-3:hover .shot-card {
-  transform: translate3d(0, -6px, 70px) rotateY(3deg);
+  transform: translate3d(0, -6px, 200px) rotateY(6deg);
+}
+
+.collage .shot-4:hover .shot-card {
+  transform: translate3d(0, -6px, 240px) rotateY(-5deg);
 }
 
 @keyframes float-a {
@@ -687,6 +735,45 @@ em {
 .spread-index {
   font-size: 13px;
   color: var(--amber);
+}
+
+.spread-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  width: fit-content;
+}
+
+.spread-brand .app-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.spread-brand > span:first-of-type {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+
+.spread-brand .dim {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--ink-3);
+  transition: color 160ms var(--ease);
+}
+
+.spread-brand .icon-arrow {
+  width: 13px;
+  height: 13px;
+}
+
+.spread-brand:hover .dim {
+  color: var(--amber-2);
 }
 
 .tag {
@@ -2419,8 +2506,12 @@ em {
   .shelf-media,
   .shot,
   .shot-card,
+  .shot-pan img,
   .big-email-text {
     transition: none;
+  }
+  .shot-pan:hover img {
+    object-position: 50% 0;
   }
 }
 
@@ -2432,6 +2523,11 @@ em {
   }
   .hero-demo {
     max-width: 720px;
+  }
+  /* Stacked hero: keep the desktop scene's proportions so the four cards keep their layout. */
+  .collage-scene {
+    height: auto;
+    aspect-ratio: 3 / 2;
   }
   .spread-grid {
     grid-template-columns: 1fr;
@@ -2504,6 +2600,7 @@ em {
   }
   .collage-scene {
     height: auto;
+    aspect-ratio: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -2522,6 +2619,9 @@ em {
   }
   .shot-1 {
     grid-column: 1 / -1;
+  }
+  .shot-4 {
+    display: none;
   }
   .shelf {
     gap: 48px;

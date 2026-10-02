@@ -87,8 +87,8 @@ export function render({ version, cssHref, base = "/canvas" }) {
       node(
         project.id,
         "work",
-        `<p class="kicker mono">${escapeHtml(project.index)} · ${escapeHtml(project.tag)}</p>
-        <h2>${escapeHtml(project.title)}</h2>
+        `<p class="kicker mono">${escapeHtml(project.index)} · ${escapeHtml(project.name ? `${project.name} · ${project.tag}` : project.tag)}</p>
+        <h2>${escapeHtml(project.title)}</h2>${project.url ? `\n        <p class="node-links"><a class="mono" href="${project.url}" target="_blank" rel="noreferrer">${escapeHtml(project.url.replace("https://", ""))}${arrowUpRight}</a></p>` : ""}
         <div class="node-diagram">${diagram(project.diagram, `cv-${project.id}`)}</div>
         <p class="summary">${escapeHtml(project.summary)}</p>
         <div class="outcomes">${project.outcomes.map((outcome) => `<div><strong>${escapeHtml(outcome.value)}</strong><span>${escapeHtml(outcome.label)}</span></div>`).join("")}</div>

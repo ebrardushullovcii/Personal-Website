@@ -1,6 +1,7 @@
 // "Journal" design: the main site. Renders index.html from data.js.
 import { accent, arrow, arrowUpRight, chrono, collage, diagram, dotnav, escapeHtml, brandsFirst, head, icon, list, loopVideo, ring, skill, stackLine, words } from "./lib/html.js";
 import {
+  heroShots,
   about,
   contact,
   earlierRoles,
@@ -61,7 +62,7 @@ function hero() {
           </div>
         </div>
         <div class="hero-demo reveal" style="--i:2">
-          ${collage(personalProjects)}
+          ${collage(heroShots)}
         </div>
       </div>
     </section>`;
@@ -80,7 +81,7 @@ function work() {
   return `
     <section id="work" class="section" aria-labelledby="work-title">
       <div class="wrap">
-        ${sectionHead("01", "Selected work", "Systems built for *real* operations.", "Professional work from the last few years. Client screenshots stay private, so each system is drawn instead of shown.")}
+        ${sectionHead("01", "Selected work", "Systems built for *real* operations.", "Professional work from the last few years, each drawn as a system map. Orderific is a public product; the rest are internal tools.")}
       </div>
       ${workProjects
         .map(
@@ -90,6 +91,11 @@ function work() {
           <div class="spread-side">
             <div class="spread-sticky">
               <p class="spread-index mono">${project.index}</p>
+              ${
+                project.name
+                  ? `<a class="spread-brand" href="${project.url}" target="_blank" rel="noreferrer"><img class="app-mark" src="${project.mark}" alt="" width="36" height="36" loading="lazy" decoding="async" /><span>${escapeHtml(project.name)}</span><span class="mono dim">${escapeHtml(project.url.replace("https://", ""))}${arrowUpRight}</span></a>`
+                  : ""
+              }
               <p class="tag">${escapeHtml(project.tag)}</p>
               <h3 class="spread-title">${escapeHtml(project.title)}</h3>
               <p class="spread-summary">${escapeHtml(project.summary)}</p>
