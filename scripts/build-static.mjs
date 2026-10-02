@@ -9,8 +9,8 @@ const root = process.cwd();
 const dist = join(root, "dist");
 const version = new Date().toISOString().slice(0, 10).replaceAll("-", "") + "-" + Date.now().toString(36).slice(-4);
 const publicResume = "assets/resume/Ebrar-Dushullovci-Resume.pdf";
-const copiedDirectories = ["assets/fonts", "assets/icons"];
-const copiedFiles = ["app.js", "assets/og.png"];
+const copiedDirectories = ["assets/fonts", "assets/icons", "assets/companion"];
+const copiedFiles = ["app.js", "companion.js", "assets/og.png"];
 
 if (existsSync(dist)) rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
@@ -82,7 +82,8 @@ for (const asset of referencedAssets) {
   const keepName = asset === publicResume || copiedDirectories.some((directory) => asset.startsWith(`${directory}/`)) || asset === "assets/og.png" || asset === "assets/favicon.svg";
   const hash = createHash("sha1").update(readFileSync(source)).digest("hex").slice(0, 8);
   const target = keepName ? asset : asset.replace(/(\.[a-z0-9]+)$/i, `.${hash}$1`);
-  hashedNames.set(asset, target);
+  // Keep the shareable PDF filename, but refresh download links when its contents change.
+  hashedNames.set(asset, asset === publicResume ? `${target}?v=${hash}` : target);
   mkdirSync(dirname(join(dist, target)), { recursive: true });
   copyFileSync(source, join(dist, target));
 }

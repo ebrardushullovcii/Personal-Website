@@ -60,6 +60,7 @@ const html = `<!doctype html>
   .role { margin-top: 3pt; font-size: 11.5pt; font-weight: 600; color: #12b48c; }
   .contact { text-align: right; font-size: 9.2pt; color: #4b5563; line-height: 1.5; }
   .contact strong { color: #1d232b; }
+  .contact .portfolio { color: #087f63; text-decoration: underline; text-underline-offset: 2pt; }
   section { margin-top: 10pt; }
   h2 { font-size: 8.6pt; letter-spacing: 0.12em; text-transform: uppercase; color: #12b48c; margin-bottom: 5pt; padding-bottom: 3pt; border-bottom: 1px solid #e3e7ec; }
   .lead { font-size: 10pt; color: #2b3440; }
@@ -96,6 +97,7 @@ const html = `<!doctype html>
     </div>
     <div class="contact">
       <div><strong><a href="mailto:${profile.email}">${escapeHtml(profile.email)}</a></strong></div>
+      <div><a class="portfolio" href="${escapeHtml(profile.siteUrl)}">Portfolio: ${escapeHtml(profile.siteUrl.replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a></div>
       <div><a href="${profile.linkedin}">${escapeHtml(profile.linkedin.replace("https://www.", "").replace(/\/$/, ""))}</a></div>
       <div><a href="${profile.github}">${escapeHtml(profile.github.replace("https://", ""))}</a></div>
       <div>${escapeHtml(profile.location)} · Remote (${escapeHtml(profile.timezone)})</div>

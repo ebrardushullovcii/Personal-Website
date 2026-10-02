@@ -1499,39 +1499,44 @@ em {
 /* ---------- side dot navigation ---------- */
 .dotnav {
   position: fixed;
-  right: 22px;
+  right: 24px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 40;
   display: grid;
-  gap: 10px;
+  gap: 28px;
 }
 
 .dotnav a {
+  z-index: 2;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
   padding: 4px;
+  width: 44px;
+  height: 44px;
+  justify-content: center;
 }
 
 .dotnav .dot {
-  width: 7px;
-  height: 7px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: var(--ink-3);
+  background: radial-gradient(circle at 32% 26%, #f2ece0 0%, #c2b7a4 46%, #817766 100%);
+  box-shadow: inset -2px -3px 5px #645b5730, 0 3px 6px #2c22131a;
   transition: transform 200ms var(--ease), background 200ms var(--ease);
 }
 
 .dotnav a.active .dot {
-  background: var(--amber);
-  transform: scale(1.5);
+  background: radial-gradient(circle at 32% 26%, #ffe8a3 0%, #e6b752 44%, #aa7027 100%);
+  transform: scale(1.12);
 }
 
 .dotnav .dot-label {
   position: absolute;
-  right: 24px;
+  right: 80px;
   white-space: nowrap;
   opacity: 0;
   transform: translateX(6px);
@@ -1547,6 +1552,59 @@ em {
 
 .dotnav a.active .dot-label {
   color: var(--ink);
+}
+
+.dotnav a:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; border-radius: 50%; }
+.dotnav a:focus-visible .dot-label { opacity: 1; transform: none; }
+.orb-companion { position: absolute; z-index: 3; top: 0; right: 22px; width: 0; height: 0; pointer-events: none; opacity: 0; }
+.orb-companion[data-depth="behind"] { z-index: 1; }
+.orb-companion.ready { opacity: 1; }
+.companion-sprite { position: absolute; width: 112px; height: 96px; left: -56px; bottom: 11px; transform-origin: 50% 100%; will-change: transform; }
+.companion-sprite img { width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; }
+.companion-sprite .companion-attention { position: absolute; inset: 0; clip-path: inset(0 0 44% 0); pointer-events: none; opacity: 0; transform-origin: 50% 55%; transition: transform 220ms var(--ease-out); }
+.companion-looking .companion-sprite > img:first-child { clip-path: inset(55% 0 0); }
+.companion-looking .companion-attention { opacity: 1; }
+.orb-companion[data-action="rest"] .companion-sprite { transition: transform 160ms var(--ease-out); }
+.companion-ring { position: absolute; left: 0; top: 0; width: 25px; height: 25px; border: 1px solid #c99b51; border-radius: 50%; opacity: 0; }
+.companion-props { position: absolute; overflow: visible; pointer-events: none; }
+.companion-tether { fill: none; stroke: #ddbd7c; stroke-width: 1.1; stroke-linecap: round; opacity: 0; }
+.companion-rope-hook { fill: #27231d; stroke: #ddbd7c; stroke-width: 1; opacity: 0; }
+.companion-portals, .companion-stars { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+.companion-portal { position: absolute; right: 60px; width: 30px; height: 82px; transform: translate(50%,-50%) scaleX(var(--portal-open,1)); }
+.companion-portal:first-child { right: 76px; }
+.portal-back, .portal-front { position: absolute; inset: 0; border: 3px solid #dfbb79; border-radius: 50%; }
+.portal-back { z-index: 1; background: radial-gradient(ellipse, #15151c 35%, #504464 75%, #dbb477 100%); }
+.portal-front { z-index: 4; border-color: #f2d99e; clip-path: inset(0 0 0 50%); }
+.companion-portal:first-child .portal-back { border-color: #cbb8df; }
+.companion-portal:first-child .portal-front { border-color: #e2d4f8; }
+.companion-plane { position: absolute; width: 52px; height: 20px; left: -26px; top: -13px; opacity: 0; pointer-events: none; transform-origin: 50% 2px; }
+.companion-plane svg { width: 100%; height: 100%; }
+.companion-stars i { position: absolute; width: 12px; height: 12px; background: linear-gradient(135deg,#fff0be,#d7a95f); clip-path: polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 94%,50% 72%,21% 94%,32% 57%,2% 35%,39% 35%); }
+.companion-click-impact { position: fixed; width: 0; height: 0; z-index: 50; pointer-events: none; }
+.click-impact-ring { position: absolute; width: 15px; height: 15px; left: -7px; top: -7px; border: 2px solid #edc17b; border-radius: 50%; }
+.click-impact-pointer { position: absolute; width: 16px; height: 21px; left: 0; top: 0; fill: #f3d48f; stroke: #5e4224; stroke-width: 1.2; }
+.companion-edge { position: absolute; left: 37px; top: -66px; width: 10px; height: 28px; border-right: 2px solid #d1c8b0; border-top: 2px solid #d1c8b0; border-radius: 0 3px 0 0; opacity: 0; }
+.companion-balloon { position: absolute; width: 13px; height: 17px; left: 7px; bottom: 83px; border-radius: 50% 50% 46% 46%; background: radial-gradient(circle at 30% 25%, #fff4c7, #e9b44e 50%, #b37c2b); opacity: 0; }
+.companion-balloon::after { content: ''; position: absolute; top: 17px; left: 6px; width: 1px; height: 12px; background: #d4ac64; }
+.companion-hit { position: absolute; left: -14px; bottom: 14px; width: 28px; height: 56px; padding: 0; border: 0; background: transparent; border-radius: 45% 45% 30% 30%; pointer-events: auto; cursor: grab; touch-action: none; transform-origin: 50% 100%; }
+.companion-hit:focus-visible { outline: 2px dashed #e7bf73; outline-offset: 4px; }
+.companion-status { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.dotnav:has(.orb-companion[data-action="media-hop"]) .dot-label { opacity: 0; }
+@media (min-width: 861px) {
+  main .wrap, footer .wrap { width: min(1180px, calc(100% - 176px)); margin-inline: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .companion-sprite { will-change: auto; }
+  .companion-sprite .companion-attention { transition: none; }
+  .orb-companion[data-action="rest"] .companion-sprite { transition: none; }
+  .dotnav .dot { transition: none; }
+}
+@media (min-width: 861px) and (max-height: 650px) {
+  .dotnav { gap: 12px; top: calc(50% + 24px); }
+}
+@media (max-height: 460px) {
+  .orb-companion { display: none; }
+  .dotnav { gap: 4px; }
 }
 
 /* subtle canvas link in the header */
@@ -2402,6 +2460,7 @@ em {
     --gutter: 20px;
   }
   .site-nav {
+    display: flex;
     position: absolute;
     top: 72px;
     left: 0;
