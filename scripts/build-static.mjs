@@ -82,7 +82,8 @@ for (const asset of referencedAssets) {
   const keepName = asset === publicResume || copiedDirectories.some((directory) => asset.startsWith(`${directory}/`)) || asset === "assets/og.png" || asset === "assets/favicon.svg";
   const hash = createHash("sha1").update(readFileSync(source)).digest("hex").slice(0, 8);
   const target = keepName ? asset : asset.replace(/(\.[a-z0-9]+)$/i, `.${hash}$1`);
-  hashedNames.set(asset, target);
+  // Keep the shareable PDF filename, but refresh download links when its contents change.
+  hashedNames.set(asset, asset === publicResume ? `${target}?v=${hash}` : target);
   mkdirSync(dirname(join(dist, target)), { recursive: true });
   copyFileSync(source, join(dist, target));
 }
