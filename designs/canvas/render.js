@@ -12,7 +12,7 @@ const layout = {
   "ai-infrastructure": { x: 720, y: 820, w: 480 },
   "p-clipvault": { x: 2300, y: 40, w: 440 },
   "p-showtracker": { x: 2840, y: 120, w: 440 },
-  "p-nordri": { x: 2300, y: 780, w: 440 },
+  "p-nestor": { x: 2300, y: 780, w: 440 },
   "e-0": { x: 160, y: 1720, w: 320 },
   "e-1": { x: 560, y: 1880, w: 320 },
   "e-2": { x: 960, y: 1720, w: 320 },
@@ -31,7 +31,7 @@ const edges = [
   ["start", "ai-infrastructure", "professional work"],
   ["start", "p-clipvault", "personal product"],
   ["start", "p-showtracker", "personal product"],
-  ["start", "p-nordri", "personal product"],
+  ["start", "p-nestor", "personal product"],
   ["start", "e-4", "career, newest first"],
   ["e-4", "e-3", "earlier"],
   ["e-3", "e-2", "earlier"],
@@ -40,7 +40,7 @@ const edges = [
   ["start", "skills", "how I work"],
   ["skills", "about", "the person"],
   ["about", "contact", "get in touch"],
-  ["p-nordri", "contact", "built for this search"],
+  ["p-nestor", "contact", "built for this search"],
 ];
 
 const tour = [
@@ -51,7 +51,7 @@ const tour = [
   ["ai-infrastructure", "Work · AI infrastructure"],
   ["p-clipvault", "Product · ClipVault"],
   ["p-showtracker", "Product · ShowTracker"],
-  ["p-nordri", "Product · Nordri"],
+  ["p-nestor", "Product · Nestor"],
   ["e-4", "Experience · today"],
   ["e-2", "Experience · leadership years"],
   ["e-0", "Experience · where it started"],

@@ -23,7 +23,7 @@ export const profile = {
 
 // Real merged pull requests from the public repos, used by the kanban board. Keep titles verbatim.
 export const boardTasks = [
-  { project: "Nordri", pr: 34, title: "Finish desktop production readiness across Job Finder and Interview Helper", state: "done" },
+  { project: "Nestor", pr: 34, title: "Finish desktop production readiness across Job Finder and Interview Helper", state: "done" },
   { project: "ShowTracker", pr: 148, title: "Finish agent guidance cleanup", state: "done" },
   { project: "ShowTracker", pr: 146, title: "Hide caught-up shared watches until an episode is actionable", state: "review" },
   { project: "ShowTracker", pr: 145, title: "Improve shared watch people picker", state: "review" },
@@ -32,13 +32,13 @@ export const boardTasks = [
   { project: "ShowTracker", pr: 142, title: "Recover canonical coordinates after historical collisions", state: "backlog" },
   { project: "ClipVault", pr: 31, title: "Reduce recording overhead", state: "backlog" },
   { project: "ShowTracker", pr: 138, title: "Retry transient TV Time metadata lookups", state: "backlog" },
-  { project: "Nordri", pr: 30, title: "Refresh multimodal resume and visual apply workflows", state: "backlog" },
+  { project: "Nestor", pr: 30, title: "Refresh multimodal resume and visual apply workflows", state: "backlog" },
   { project: "ShowTracker", pr: 137, title: "Fix multilingual TV Time import matching", state: "queue" },
-  { project: "Nordri", pr: 24, title: "Ship Job Finder resume catalog, studio UX reset, and truthful preview editing", state: "queue" },
+  { project: "Nestor", pr: 24, title: "Ship Job Finder resume catalog, studio UX reset, and truthful preview editing", state: "queue" },
   { project: "ClipVault", pr: 28, title: "Restore tray icon on startup", state: "queue" },
   { project: "ShowTracker", pr: 127, title: "Reconcile TV Time episodes with provider catalogues", state: "queue" },
-  { project: "Nordri", pr: 20, title: "Ship source intelligence and faster discovery", state: "queue" },
-  { project: "Nordri", pr: 11, title: "Add system-aware desktop light theme", state: "queue" },
+  { project: "Nestor", pr: 20, title: "Ship source intelligence and faster discovery", state: "queue" },
+  { project: "Nestor", pr: 11, title: "Add system-aware desktop light theme", state: "queue" },
   { project: "ClipVault", pr: 23, title: "Repair Windows startup registration", state: "queue" },
   { project: "ShowTracker", pr: 134, title: "Refine signed-in UI and branding", state: "queue" },
 ];
@@ -296,17 +296,17 @@ export const personalProjects = [
     stack: "Expo · React Native · TypeScript · Convex · NativeWind",
   },
   {
-    id: "nordri",
-    name: "Nordri",
+    id: "nestor",
+    name: "Nestor",
     status: "In development",
-    url: "https://nordri.netlify.app",
-    repo: "https://github.com/ebrardushullovcii/Nordri",
-    primary: { label: "Website", href: "https://nordri.netlify.app" },
-    mark: "/assets/projects/nordri-mark.png",
-    image: "/assets/projects/nordri.jpg",
-    imageAlt: "Nordri Job Finder with job results, fit scores, and the details of a selected job, on sample data",
-    loop: { src: "/assets/projects/nordri-loop.mp4", poster: "/assets/projects/nordri-loop.jpg", zoom: 1.18 },
-    film: { src: "/assets/projects/nordri-film.mp4", poster: "/assets/projects/nordri-film.jpg", seconds: 38 },
+    url: "https://trynestor.netlify.app",
+    repo: "https://github.com/ebrardushullovcii/Nestor",
+    primary: { label: "Website", href: "https://trynestor.netlify.app" },
+    mark: "/assets/projects/nestor-mark.png",
+    image: "/assets/projects/nestor.jpg",
+    imageAlt: "Nestor Job Finder with job results, fit scores, and the details of a selected job, on sample data",
+    loop: { src: "/assets/projects/nestor-loop.mp4", poster: "/assets/projects/nestor-loop.jpg", zoom: 1.18 },
+    film: { src: "/assets/projects/nestor-film.mp4", poster: "/assets/projects/nestor-film.jpg", seconds: 38 },
     summary:
       "A local-first desktop app for job search. Job Finder searches the sites you choose in its own browser, shows how well each job fits and why, tailors a resume per job, and fills in applications in the mode you pick. Live Assistant helps during the interview itself.",
     points: [
@@ -329,7 +329,7 @@ export const heroShots = [
     imageAlt: "Orderific restaurant dashboard with sales progress, new customers, weekly stats and latest orders, from Orderific's public site",
     pan: true,
   },
-  ...["nordri", "showtracker"].map((id) => personalProjects.find((project) => project.id === id)),
+  ...["nestor", "showtracker"].map((id) => personalProjects.find((project) => project.id === id)),
   // Tucked behind the others, so only a narrow band shows: label it with the version alone.
   ((clipvault) => ({ ...clipvault, status: clipvault.status.split(" · ").pop() }))(personalProjects.find((project) => project.id === "clipvault")),
 ];
@@ -539,13 +539,13 @@ export const milestones = [
   },
   {
     date: "2026-03",
-    label: "Nordri",
+    label: "Nestor",
     status: "In development",
     detail: "Local-first desktop app for job search: fit you can check, a tailored resume per job, and applications filled in the mode you pick. Renamed from UnEmployed in September 2026.",
     kind: "project",
-    url: "https://nordri.netlify.app",
-    image: "/assets/projects/nordri.jpg",
-    mark: "/assets/projects/nordri-mark.png",
+    url: "https://trynestor.netlify.app",
+    image: "/assets/projects/nestor.jpg",
+    mark: "/assets/projects/nestor-mark.png",
   },
   { date: "2026-09", label: "Available now", detail: "Open to senior full-stack and product engineering roles.", kind: "now" },
 ];
