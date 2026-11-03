@@ -486,7 +486,7 @@ export const personalProjects = [
     },
     "summary": "A TV, anime and movie tracker I built for personal use. Tracks progress and upcoming episodes across four media providers, with shared watches and imports. Friends and I have used it daily for months.",
     "points": [
-      "Live on the web, built with Expo/React Native, TypeScript and Convex. iOS and Android are mobile targets, not store releases.",
+      "Built with Expo/React Native, TypeScript and Convex. iOS and Android are mobile targets, not store releases.",
       "Reconciles episode identities across providers. Compact indexed projections cut data read by about 84% in a 203-title release-sync replay test."
     ],
     "stack": "Expo · React Native · TypeScript · Convex · NativeWind"
@@ -810,6 +810,6 @@ export const contact = {
     "Full-stack product engineering",
     "Internal tools and QA automation",
     "Desktop and cross-platform products",
-    "AI-assisted delivery systems"
+    "AI-assisted development"
   ]
 };

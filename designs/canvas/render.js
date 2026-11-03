@@ -61,7 +61,7 @@ const node = (id, kind, body) => {
 };
 
 export function render({ version, cssHref, base = "/canvas" }) {
-  const description = `${profile.name}, senior full-stack software engineer. Real-time operational products, QA automation, desktop tools, and AI-assisted developer systems.`;
+  const description = `${profile.name}, senior full-stack software engineer. Real-time operational products, QA automation, desktop tools, and internal developer tools.`;
   const nodes = [
     node(
       "start",
@@ -155,7 +155,7 @@ export function render({ version, cssHref, base = "/canvas" }) {
   <head>
     <meta name="color-scheme" content="dark" />
     <meta name="robots" content="noindex" />
-    ${head({ profile, title: `${profile.name} — Canvas`, description, version, cssHref, themeColor: "#0a0a0c", fonts: "family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@1" })}
+    ${head({ profile, title: `${profile.name} | Canvas`, description, version, cssHref, themeColor: "#0a0a0c", fonts: "family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@1" })}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

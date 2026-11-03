@@ -132,7 +132,7 @@ function products() {
   return `
     <section id="products" class="section section-products" aria-labelledby="products-title">
       <div class="wrap">
-        ${sectionHead("02", "Personal products", "What I build when I own the *whole* product.", "Public repositories. Where I test product taste, architecture, and long-term iteration.")}
+        ${sectionHead("02", "Personal products", "What I build when I own the *whole* product.", "Public projects I build, use and maintain.")}
         <div class="shelf">
           ${personalProjects
             .map(
@@ -282,7 +282,7 @@ export function renderNotFound({ version, cssHref = "/styles.css" }) {
     <meta name="robots" content="noindex" />
     ${head({
       profile,
-      title: `Page not found — ${profile.name}`,
+      title: `Page not found | ${profile.name}`,
       description: "That page does not exist.",
       version,
       cssHref,
@@ -322,7 +322,7 @@ const filmDialog = () => `
     </dialog>`;
 
 export function renderIndex({ version, cssHref = "/styles.css" }) {
-  const description = `${profile.name} is a senior full-stack software engineer building real-time operational products, QA automation, desktop tools, and AI-assisted developer systems. React, Next.js, TypeScript, Node.js, and .NET.`;
+  const description = `${profile.name} is a senior full-stack software engineer building real-time operational products, QA automation, desktop tools, and internal developer tools. React, Next.js, TypeScript, Node.js, and .NET.`;
   return `<!doctype html>
 <html lang="en">
   <head>
