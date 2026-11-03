@@ -241,6 +241,7 @@
       triggers.forEach((trigger) => {
         const on = trigger.dataset.detail === id;
         trigger.classList.toggle("selected", on);
+        trigger.setAttribute("aria-pressed", String(on));
         if (on && animate && !reduceMotion) {
           trigger.classList.remove("flash");
           void trigger.offsetWidth;
@@ -360,6 +361,11 @@
     update();
     rail.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
+    chronoEl.closest("details")?.addEventListener("toggle", (event) => {
+      if (!event.target.open) return;
+      rail.scrollTo({ left: nowLeft(), behavior: "auto" });
+      update();
+    });
 
     // One-time nudge when the rail first comes into view, so the sideways scroll is discoverable.
     if (!reduceMotion && "IntersectionObserver" in window) {
@@ -454,7 +460,7 @@
 
   /* ---------- warm up canvas mode after the page has settled ---------- */
   const canvasLink = document.querySelector(".canvas-link");
-  if (canvasLink) {
+  if (canvasLink && window.matchMedia("(min-width: 861px)").matches && !reduceMotion) {
     const warm = () => {
       ["/canvas/", "/canvas/styles.css", "/canvas/app.js"].forEach((href) => {
         const link = document.createElement("link");

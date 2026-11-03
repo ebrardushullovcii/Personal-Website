@@ -1409,7 +1409,7 @@ em {
   transform: translateY(-1px);
 }
 
-.brand {
+svg.brand {
   width: 0.78em;
   height: 0.78em;
   flex: none;
@@ -2821,3 +2821,48 @@ html.film-open {
     display: none;
   }
 }
+
+/* Readable career history; the timeline is an optional enhancement. */
+.role-list { margin-top: 48px; }
+.role-entry { padding: 30px 0; border-top: 1px solid var(--line); max-width: 900px; }
+.role-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; }
+.role-heading h3 { font-family: var(--display); font-size: 24px; letter-spacing: -.02em; }
+.role-company { color: var(--amber); margin-bottom: 6px; }
+.role-dates { white-space: nowrap; color: var(--ink-2); }
+.role-mode { margin: 8px 0 14px; color: var(--ink-3); }
+.role-summary, .role-entry .list { max-width: 75ch; }
+.role-entry .list { margin-top: 12px; gap: 10px; }
+.timeline-disclosure { margin-top: 36px; border-top: 1px solid var(--line); padding-top: 22px; }
+.timeline-disclosure summary { cursor: pointer; color: var(--ink-2); padding: 12px 0; }
+.work-method, .skills-block { margin-top: 64px; }
+.method-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px; list-style: none; padding: 0; margin-top: 26px; }
+.method-steps h4 { font-size: 17px; margin-bottom: 8px; }
+.method-steps p { color: var(--ink-2); }
+.skills-list { margin-top: 24px; max-width: 900px; }
+.skills-list > div { display: grid; grid-template-columns: 180px 1fr; gap: 24px; border-top: 1px solid var(--line); padding: 16px 0; }
+.skills-list dt { font-weight: 600; }
+.skills-list dd { margin: 0; color: var(--ink-2); }
+.spread-compact { padding: 48px 0; }
+.spread-compact .intro { margin-top: 18px; max-width: 76ch; }
+.spread-compact .stack { margin-top: 20px; }
+@media (max-width: 860px) {
+  .method-steps { grid-template-columns: 1fr; gap: 20px; }
+  .role-heading { display: block; }
+  .role-dates { margin-top: 8px; }
+  .skills-list > div { grid-template-columns: 1fr; gap: 8px; }
+  .header-inner { gap: 12px; }
+  .header-actions { gap: 10px; }
+  .site-header .brand { flex-shrink: 0; font-size: 15px; }
+  .header-actions .canvas-link { display: none; }
+  .site-nav::after { content: none; }
+  .site-nav .mobile-canvas { display: block; }
+}
+@media (min-width: 861px) { .site-nav .mobile-canvas { display: none; } }
+html:not(.js) .nav-toggle { display: none; }
+@media (max-width: 860px) {
+  html:not(.js) .site-header { position: relative; }
+  html:not(.js) .header-inner { flex-wrap: wrap; padding: 16px 0; }
+  html:not(.js) .site-nav { position: static; display: flex; flex-wrap: wrap; transition: none; opacity: 1; visibility: visible; pointer-events: auto; transform: none; width: 100%; order: 3; padding: 0; }
+  html:not(.js) .site-nav a { padding: 10px; border: 0; }
+}
+html:not(.js) .timeline-disclosure { display: none; }

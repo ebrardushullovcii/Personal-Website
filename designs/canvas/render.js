@@ -2,7 +2,9 @@
 import { accent, arrow, arrowUpRight, diagram, escapeHtml, head, icon, list } from "../../lib/html.js";
 import { about, contact, earlierRoles, experience, personalProjects, profile, skillTiers, workProjects, workflow } from "../../data.js";
 
-const WORLD = { w: 3700, h: 2700 };
+const WORLD = { w: 4100, h: 2700 };
+const career = [...experience].sort((a, b) => b.start.localeCompare(a.start));
+const roleNode = (job) => `e-${job.id}`;
 
 const layout = {
   start: { x: 1460, y: 900, w: 560 },
@@ -13,14 +15,10 @@ const layout = {
   "p-clipvault": { x: 2300, y: 40, w: 440 },
   "p-showtracker": { x: 2840, y: 120, w: 440 },
   "p-nestor": { x: 2300, y: 780, w: 440 },
-  "e-0": { x: 160, y: 1720, w: 320 },
-  "e-1": { x: 560, y: 1880, w: 320 },
-  "e-2": { x: 960, y: 1720, w: 320 },
-  "e-3": { x: 1360, y: 1880, w: 320 },
-  "e-4": { x: 1760, y: 1720, w: 320 },
-  skills: { x: 2300, y: 1600, w: 580 },
-  about: { x: 2960, y: 940, w: 460 },
-  contact: { x: 2960, y: 1660, w: 560 },
+  ...Object.fromEntries(career.map((job, i) => [roleNode(job), { x: 160 + i * 400, y: i % 2 ? 1880 : 1720, w: 320 }])),
+  skills: { x: 2700, y: 1600, w: 580 },
+  about: { x: 3330, y: 940, w: 460 },
+  contact: { x: 3330, y: 1660, w: 560 },
 };
 
 // Edges carry a short label shown when either end is focused.
@@ -32,15 +30,11 @@ const edges = [
   ["start", "p-clipvault", "personal product"],
   ["start", "p-showtracker", "personal product"],
   ["start", "p-nestor", "personal product"],
-  ["start", "e-4", "career, newest first"],
-  ["e-4", "e-3", "earlier"],
-  ["e-3", "e-2", "earlier"],
-  ["e-2", "e-1", "earlier"],
-  ["e-1", "e-0", "earlier"],
+  ["start", roleNode(career[0]), "career, newest first"],
+  ...career.slice(1).map((job, i) => [roleNode(career[i]), roleNode(job), "earlier"]),
   ["start", "skills", "how I work"],
   ["skills", "about", "the person"],
   ["about", "contact", "get in touch"],
-  ["p-nestor", "contact", "built for this search"],
 ];
 
 const tour = [
@@ -52,9 +46,10 @@ const tour = [
   ["p-clipvault", "Product · ClipVault"],
   ["p-showtracker", "Product · ShowTracker"],
   ["p-nestor", "Product · Nestor"],
-  ["e-4", "Experience · today"],
-  ["e-2", "Experience · leadership years"],
-  ["e-0", "Experience · where it started"],
+  ["e-automatedpros-senior", "Experience · current engineering"],
+  ["e-nordri", "Experience · concurrent Nordri work"],
+  ["e-orderific-cxo", "Experience · leadership years"],
+  ["e-crea-ko", "Experience · where it started"],
   ["skills", "Skills and how I work"],
   ["about", "About"],
   ["contact", "Contact"],
@@ -89,7 +84,7 @@ export function render({ version, cssHref, base = "/canvas" }) {
         "work",
         `<p class="kicker mono">${escapeHtml(project.index)} · ${escapeHtml(project.name ? `${project.name} · ${project.tag}` : project.tag)}</p>
         <h2>${escapeHtml(project.title)}</h2>${project.url ? `\n        <p class="node-links"><a class="mono" href="${project.url}" target="_blank" rel="noreferrer">${escapeHtml(project.url.replace("https://", ""))}${arrowUpRight}</a></p>` : ""}
-        <div class="node-diagram">${diagram(project.diagram, `cv-${project.id}`)}</div>
+        ${project.compact ? "" : `<div class="node-diagram">${diagram(project.diagram, `cv-${project.id}`)}</div>`}
         <p class="summary">${escapeHtml(project.summary)}</p>
         <div class="outcomes">${project.outcomes.map((outcome) => `<div><strong>${escapeHtml(outcome.value)}</strong><span>${escapeHtml(outcome.label)}</span></div>`).join("")}</div>
         ${list(project.points, "list", { brief: true })}
@@ -109,9 +104,9 @@ export function render({ version, cssHref, base = "/canvas" }) {
         <p class="node-links"><a class="mono" href="${project.primary.href}" target="_blank" rel="noreferrer">${escapeHtml(project.primary.label)}${arrowUpRight}</a>${project.repo !== project.primary.href ? `<a class="mono" href="${project.repo}" target="_blank" rel="noreferrer">GitHub${arrowUpRight}</a>` : ""}</p>`,
       ),
     ),
-    ...experience.map((job, index) =>
+    ...experience.map((job) =>
       node(
-        `e-${index}`,
+        roleNode(job),
         `role${job.current ? " current" : ""}`,
         `<p class="kicker mono">${escapeHtml(job.period)}</p>
         <h2>${escapeHtml(job.title)}</h2>
@@ -171,7 +166,7 @@ export function render({ version, cssHref, base = "/canvas" }) {
       </div>
       <div class="bar-mid">
         <button type="button" class="ctl ctl-tour" data-tour><svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg><span>Take the tour</span></button>
-        <span class="tour-callout mono" id="tour-callout">14 stops, next and previous, about two minutes</span>
+        <span class="tour-callout mono" id="tour-callout">${tour.length} stops, next and previous, about two minutes</span>
       </div>
       <a class="btn btn-solid btn-sm" href="mailto:${profile.email}">Email me${arrowUpRight}</a>
     </header>

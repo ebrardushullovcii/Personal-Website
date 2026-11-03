@@ -1,5 +1,5 @@
 // "Journal" design: the main site. Renders index.html from data.js.
-import { accent, arrow, arrowUpRight, chrono, collage, diagram, dotnav, escapeHtml, brandsFirst, head, icon, list, loopVideo, ring, skill, stackLine, words } from "./lib/html.js";
+import { accent, arrow, arrowUpRight, chrono, collage, diagram, dotnav, escapeHtml, head, icon, list, loopVideo, stackLine, words } from "./lib/html.js";
 import {
   heroShots,
   about,
@@ -25,16 +25,17 @@ const navItems = [
   ["#contact", "05", "Contact"],
 ];
 
-function header() {
+function header({ fromNotFound = false } = {}) {
   return `
     <header class="site-header" id="top">
       <div class="wrap header-inner">
-        <a class="brand" href="#top" aria-label="${escapeHtml(profile.name)}, back to top">
+        <a class="brand" href="${fromNotFound ? "/" : "#top"}" aria-label="${escapeHtml(profile.name)}, ${fromNotFound ? "home" : "back to top"}">
           <span class="brand-first">${escapeHtml(profile.firstName)}</span>
           <span class="brand-last">${escapeHtml(profile.lastName)}</span>
         </a>
         <nav class="site-nav" id="site-nav" aria-label="Sections">
-          ${navItems.map(([href, num, label]) => `<a href="${href}"><span class="num">${num}</span>${label}</a>`).join("")}
+          ${navItems.map(([href, num, label]) => `<a href="${fromNotFound ? "/" : ""}${href}"><span class="num">${num}</span>${label}</a>`).join("")}
+          <a class="mobile-canvas" href="/canvas/">Canvas</a>
         </nav>
         <div class="header-actions">
           <span class="avail"><span class="pulse" aria-hidden="true"></span>${escapeHtml(profile.availability)}</span>
@@ -72,7 +73,7 @@ function sectionHead(num, eyebrow, title, intro) {
   return `
       <div class="section-head reveal">
         <p class="kicker"><span class="num">${num}</span>${escapeHtml(eyebrow)}</p>
-        <h2 class="display-2">${accent(title)}</h2>
+        <h2 id="${({ "01": "work-title", "02": "products-title", "03": "experience-title" })[num]}" class="display-2">${accent(title)}</h2>
         ${intro ? `<p class="intro">${escapeHtml(intro)}</p>` : ""}
       </div>`;
 }
@@ -81,11 +82,19 @@ function work() {
   return `
     <section id="work" class="section" aria-labelledby="work-title">
       <div class="wrap">
-        ${sectionHead("01", "Selected work", "Systems built for *real* operations.", "Professional work from the last few years, each drawn as a system map. Orderific is a public product; the rest are internal tools.")}
+        ${sectionHead("01", "Selected work", "Systems built for *real* operations.", "Selected professional work. Orderific is a public product; TestingMill and the generation pipeline are internal tools.")}
       </div>
       ${workProjects
         .map(
-          (project) => `
+          (project) => project.compact ? `
+      <article class="spread spread-compact" id="${project.id}">
+        <div class="wrap">
+          <p class="kicker">${escapeHtml(project.tag)}</p>
+          <h3 class="display-3">${escapeHtml(project.title)}</h3>
+          <p class="intro">${escapeHtml(project.summary)}</p>
+          <p class="mono stack">${stackLine(project.stack)}</p>
+        </div>
+      </article>` : `
       <article class="spread" id="${project.id}">
         <div class="wrap spread-grid">
           <div class="spread-side">
@@ -105,7 +114,7 @@ function work() {
           <div class="spread-main">
             <figure class="diagram-frame reveal">
               ${diagram(project.diagram, project.id)}
-              <figcaption class="mono">system map</figcaption>
+              <figcaption class="mono">workflow overview</figcaption>
             </figure>
             <div class="outcomes reveal">
               ${project.outcomes.map((outcome) => `<div><strong class="display-num">${escapeHtml(outcome.value)}</strong><span>${escapeHtml(outcome.label)}</span></div>`).join("")}
@@ -180,37 +189,30 @@ function experienceSection() {
   return `
     <section id="experience" class="section" aria-labelledby="experience-title">
       <div class="wrap">
-        ${sectionHead("03", "Experience", "Ten years on one *line*.", "Every role and product since 2016. Roles are bars, products are cards, and the axis marks the turning points. Hover a product for a look, click anything for the detail.")}
-        <div class="reveal">${chrono({ experience, milestones })}</div>
-        <p class="earlier reveal">${escapeHtml(earlierRoles)}</p>
-      </div>
-
-      <div class="wrap loop-grid" aria-labelledby="loop-title">
-        <div class="loop-copy reveal">
-          <p class="kicker">How I work</p>
-          <h3 id="loop-title" class="display-3">AI adds speed. Judgment keeps the work <em>honest</em>.</h3>
-          <p class="intro">I use agents and automation throughout delivery. The loop around the tools is what makes the result dependable.</p>
-          <ol class="loop-steps">
-            ${workflow.map((step, index) => `<li><span class="mono num">0${index + 1}</span><div><h4>${escapeHtml(step.title)}</h4><p>${escapeHtml(step.body)}</p></div></li>`).join("")}
-          </ol>
+        ${sectionHead("03", "Experience", "A career close to the *product*.", "Engineering, customer experience and QA, with concurrent work marked clearly.")}
+        <div class="role-list">
+          ${experience.map((job) => `
+          <article class="role-entry" id="role-${job.id}">
+            <div class="role-heading"><div><p class="mono role-company">${escapeHtml(job.company)}</p><h3>${escapeHtml(job.title)}</h3></div><p class="mono role-dates">${escapeHtml(job.period)}</p></div>
+            <p class="mono role-mode">${escapeHtml(job.mode)}</p>
+            <p class="role-summary">${escapeHtml(job.summary)}</p>
+            ${job.points.length ? list(job.points) : ""}
+          </article>`).join("")}
         </div>
-        <div class="loop-ring reveal">${ring(workflow)}</div>
+        <p class="earlier">${escapeHtml(earlierRoles)}</p>
+        <details class="timeline-disclosure">
+          <summary>Explore the career timeline</summary>
+          ${chrono({ experience, milestones })}
+        </details>
       </div>
-
-      <div class="wrap tiers" aria-label="Skills">
-        <div class="section-head reveal">
-          <p class="kicker">Skills</p>
-          <h3 class="display-3">Tools chosen by the problem, not the <em>trend</em>.</h3>
-        </div>
-        ${skillTiers
-          .map(
-            (tier) => `
-        <div class="tier reveal">
-          <div class="tier-head"><h4>${escapeHtml(tier.name)}</h4><p>${escapeHtml(tier.note)}</p></div>
-          <p class="tier-items">${brandsFirst(tier.items).map((item) => skill(item)).join("")}</p>
-        </div>`,
-          )
-          .join("")}
+      <div class="wrap work-method" aria-labelledby="loop-title">
+        <p class="kicker">How I work</p>
+        <h3 id="loop-title" class="display-3">From understanding the problem to checking the result.</h3>
+        <ol class="method-steps">${workflow.map((step) => `<li><h4>${escapeHtml(step.title)}</h4><p>${escapeHtml(step.body)}</p></li>`).join("")}</ol>
+      </div>
+      <div class="wrap skills-block" aria-labelledby="skills-title">
+        <p class="kicker">Skills</p><h3 id="skills-title" class="display-3">The main tools I work with.</h3>
+        <dl class="skills-list">${skillTiers.map((tier) => `<div><dt>${escapeHtml(tier.name)}</dt><dd>${tier.items.map(escapeHtml).join(", ")}</dd></div>`).join("")}</dl>
       </div>
     </section>`;
 }
@@ -290,7 +292,7 @@ export function renderNotFound({ version, cssHref = "/styles.css" }) {
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
-    ${header()}
+    ${header({ fromNotFound: true })}
     <main id="main" class="not-found">
       <p class="kicker"><span class="num">404</span>Page not found</p>
       <h1 class="display">${accent("Nothing lives at this *address*.")}</h1>

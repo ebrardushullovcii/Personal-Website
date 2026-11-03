@@ -17,13 +17,13 @@ mkdirSync(dist, { recursive: true });
 
 const write = (relative, contents) => {
   mkdirSync(dirname(join(dist, relative)), { recursive: true });
-  writeFileSync(join(dist, relative), contents);
+  writeFileSync(join(dist, relative), typeof contents === "string" ? contents.replace(/^[ \t]+$/gm, "") : contents);
 };
 
 // Pages: the main site plus every design variant under /designs/<slug>/.
 const pages = [];
 const indexHtml = renderIndex({ version, cssHref: "/styles.css" });
-writeFileSync(join(root, "index.html"), indexHtml);
+writeFileSync(join(root, "index.html"), indexHtml.replace(/^[ \t]+$/gm, ""));
 write("index.html", indexHtml);
 write("styles.css", readFileSync(join(root, "styles.css"), "utf8"));
 write("404.html", renderNotFound({ version, cssHref: "/styles.css" }));
@@ -33,7 +33,7 @@ const lastmod = new Date().toISOString().slice(0, 10);
 write(
   "sitemap.xml",
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    ["/", "/canvas/"].map((path) => `  <url><loc>${profile.siteUrl}${path}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n") +
+    ["/"].map((path) => `  <url><loc>${profile.siteUrl}${path}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n") +
     `\n</urlset>\n`,
 );
 

@@ -1,8 +1,21 @@
 /* Art-directed sprite poses; bounded motion, no skeleton, WebGL or physics rig. */
-(() => {
+(function initCompanion() {
   const nav = document.querySelector('.dotnav');
   const actor = nav?.querySelector('.orb-companion');
   if (!actor) return;
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const desktop = matchMedia('(min-width: 861px)');
+  if (!desktop.matches || motion.matches) {
+    const startWhenReady = () => {
+      if (!desktop.matches || motion.matches) return;
+      desktop.removeEventListener('change', startWhenReady);
+      motion.removeEventListener('change', startWhenReady);
+      initCompanion();
+    };
+    desktop.addEventListener('change', startWhenReady);
+    motion.addEventListener('change', startWhenReady);
+    return;
+  }
   const image = actor.querySelector('img');
   const sprite = actor.querySelector('.companion-sprite');
   const attentionLayer = image.cloneNode();
@@ -22,8 +35,6 @@
   plane.innerHTML='<svg viewBox="0 0 52 20"><path fill="#eec878" d="M1 5 51 1 29 19 19 10Z"/><path fill="#fff0c1" d="M1 5 51 1 19 10Z"/><path fill="none" stroke="#b5843e" stroke-width="1" d="m19 10 32-9-22 18"/></svg>';actor.append(plane);
   const steps=document.createElement('span');steps.className='companion-stars';steps.setAttribute('aria-hidden','true');steps.innerHTML='<i></i><i></i>';nav.append(steps);
   const links = [...nav.querySelectorAll('a')];
-  const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  const desktop = matchMedia('(min-width: 861px)');
   const hover = matchMedia('(hover: hover)');
   const poses = ['rest','crouch','launch','tuck','land','wings','balloon','wave','grab','compress','push','balloon-pull','balloon-arrive','release','look-left','look-right','look-down','typing-a','typing-b','surprise','ouch','recover','swat','kick','dodge','recoil'];
   const assetVersion = document.querySelector('script[src^="/app.js"]')?.getAttribute('src').split('?')[1] ?? 'pose-v3';

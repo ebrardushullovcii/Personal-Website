@@ -10,7 +10,7 @@ Single-page portfolio for Ebrar Dushullovci, built as static HTML with no framew
 - `designs/canvas/`: Canvas mode, published at `/canvas/` (noindex) and linked from a small header link. Same data, rendered as a pannable map of connected nodes with a stepped tour. Phones get a note and a link back.
 - `styles.css`, `app.js`: styling and the small interaction layer (mobile nav, scroll reveal, count-up, active nav).
 - `scripts/build-static.mjs`: writes `index.html`, every design, and the deployable `dist/` folder. Referenced images are copied under content-hashed names, so replacing an image never needs a rename. All local paths are root-absolute (`/assets/...`). `dist/` is tracked as the deployment artifact.
-- `scripts/make-resume.mjs`: regenerates the public resume PDF from `data.js` with headless Chrome. Run it after changing experience or profile content.
+- The public resume at `assets/resume/Ebrar-Dushullovci-Resume.pdf` is reviewed separately. Website content changes must not regenerate or overwrite it. Replace it only with a newly reviewed public PDF, then rebuild. The older resume scripts are retired and fail without writing files.
 - `scripts/make-og.mjs`: regenerates the social preview image `assets/og.png`.
 - `scripts/check-site.mjs`: verifies every local reference in `dist/` exists and no private file leaked.
 - Product media lives in `assets/projects/`: a still, an app icon (`*-mark.png`), and a short muted loop (`*-loop.mp4`) plus a 35 to 38-second film (`*-film.mp4`) copied from each product's own landing page. Loops use `preload="none"` and load only in view (shelf) or on hover (hero collage); films open in one shared `<dialog>` and fall back to the plain file without JavaScript. The asset scanner also follows `poster`, `data-src` and `data-poster`. Nestor's loop has padding baked in, so its `zoom` (1.18) crops to the app window; `nestor.jpg` is the same crop.
@@ -20,7 +20,7 @@ Single-page portfolio for Ebrar Dushullovci, built as static HTML with no framew
 ```bash
 npm run build     # index.html + dist/
 npm run check     # sanity checks on dist/
-npm run resume    # assets/resume/Ebrar-Dushullovci-Resume.pdf
+npm run resume    # retired; preserves the reviewed PDF
 npm run dev       # build, then serve dist/ on http://127.0.0.1:4173
 ```
 
