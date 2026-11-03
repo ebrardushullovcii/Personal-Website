@@ -42,7 +42,7 @@ const tour = [
   ["orderific", "Work · restaurant platform"],
   ["testingmill", "Work · QA platform"],
   ["figma-to-next", "Work · Figma to Next.js"],
-  ["ai-infrastructure", "Work · AI infrastructure"],
+  ["ai-infrastructure", "Work · model serving"],
   ["p-clipvault", "Product · ClipVault"],
   ["p-showtracker", "Product · ShowTracker"],
   ["p-nestor", "Product · Nestor"],
@@ -162,7 +162,7 @@ export function render({ version, cssHref, base = "/canvas" }) {
     <header class="bar">
       <div class="bar-left">
         <a class="brand" href="/">${escapeHtml(profile.firstName)} <em>${escapeHtml(profile.lastName)}</em></a>
-        <a class="back" href="/">${arrow}<span>Back to the site</span></a>
+        <a class="back" href="/" aria-label="Back to the site">${arrow}<span>Back to the site</span></a>
       </div>
       <div class="bar-mid">
         <button type="button" class="ctl ctl-tour" data-tour><svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg><span>Take the tour</span></button>

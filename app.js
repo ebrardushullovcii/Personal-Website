@@ -391,6 +391,25 @@
     if (hint) setTimeout(() => hint.classList.add("seen"), 15000);
   });
 
+  /* ---------- workflow maps on narrow screens ---------- */
+  document.querySelectorAll(".diagram-frame").forEach((frame) => {
+    const scroll = frame.querySelector(".diagram-scroll");
+    if (!scroll) return;
+    const buttons = [...frame.querySelectorAll("[data-diagram-scroll]")];
+    const update = () => buttons.forEach((button) => {
+      const atStart = scroll.scrollLeft <= 1;
+      const atEnd = scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 1;
+      button.disabled = Number(button.dataset.diagramScroll) < 0 ? atStart : atEnd;
+    });
+    buttons.forEach((button) => button.addEventListener("click", () => {
+      scroll.scrollLeft += Number(button.dataset.diagramScroll) * scroll.clientWidth;
+      update();
+    }));
+    scroll.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  });
+
   /* ---------- product clips: shelf loops play in view, collage loops play on hover ---------- */
   const loadClip = (video) => {
     if (!video.src && video.dataset.src) video.src = video.dataset.src;

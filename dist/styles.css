@@ -831,6 +831,9 @@ em {
   .diagram-frame {
     min-width: 0;
     max-width: 100%;
+  }
+  .diagram-scroll {
+    max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
@@ -2564,7 +2567,7 @@ svg.brand {
     flex-direction: column;
     gap: 2px;
     padding: 10px 20px 18px;
-    background: rgba(11, 11, 13, 0.97);
+    background: #0b0b0d;
     border-bottom: 1px solid var(--line);
     transform: translateY(-8px);
     opacity: 0;
@@ -2866,3 +2869,19 @@ html:not(.js) .nav-toggle { display: none; }
   html:not(.js) .site-nav a { padding: 10px; border: 0; }
 }
 html:not(.js) .timeline-disclosure { display: none; }
+
+/* Keep the deepest hero preview quiet and mobile workflow controls visible. */
+.shot-4 .shot-cap { display: none; }
+.diagram-help { display: none; }
+@media (max-width: 600px) {
+  .diagram-caption-label { display: none; }
+  .diagram-help { display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; font-size: 11px; }
+  .diagram-help .ctl { flex: none; width: 40px; height: 40px; }
+}
+@media (max-width: 860px) {
+  .site-nav .mobile-canvas { padding-left: 32px; }
+}
+
+html:not(.js) .diagram-help .ctl { display: none; }
+
+.diagram-help .ctl:disabled { opacity: .35; cursor: default; }

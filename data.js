@@ -116,14 +116,14 @@ export const workProjects = [
     "mark": "/assets/projects/orderific-mark.png",
     "tag": "Real-time operations",
     "title": "Restaurant ordering and kitchen platform",
-    "summary": "Ordering and kitchen-display work on Orderific, AutomatedPros' restaurant platform, which serves thousands of restaurants. I led engineers across architecture, code review and delivery, and worked directly with the people using the software.",
+    "summary": "Ordering and kitchen-display work on Orderific, AutomatedPros' restaurant platform, which serves thousands of restaurants. I lead engineers across architecture, code review and delivery, and work directly with the people using the software.",
     "points": [
       {
-        "result": "Kitchen tickets reached displays in under a second.",
-        "how": "Delivered ordering and kitchen-display workflows in React, Next.js and Node.js. Redesigned tablet flows raised staff task completion from 83% to 98% in usability tests."
+        "result": "Ordering and kitchen-display workflows.",
+        "how": "Delivered features in React, Next.js and Node.js, including redesigned tablet flows tested with staff."
       },
       {
-        "result": "Reusable delivery and payment adapters cut new-integration effort by about 40%."
+        "result": "Reusable adapters for delivery and payment integrations."
       },
       {
         "result": "Customer research informed kitchen UI changes.",
@@ -177,7 +177,7 @@ export const workProjects = [
           "y": 30,
           "w": 118,
           "label": "Kitchen display",
-          "sub": "< 1 s"
+          "sub": "order tickets"
         },
         {
           "id": "mgmt",

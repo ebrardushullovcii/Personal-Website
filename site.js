@@ -113,8 +113,10 @@ function work() {
           </div>
           <div class="spread-main">
             <figure class="diagram-frame reveal">
-              ${diagram(project.diagram, project.id)}
-              <figcaption class="mono">workflow overview</figcaption>
+              <div class="diagram-scroll" tabindex="0" role="region" aria-label="${escapeHtml(project.name || project.title)} workflow">
+                ${diagram(project.diagram, project.id)}
+              </div>
+              <figcaption class="mono"><span class="diagram-caption-label">workflow overview</span><span class="diagram-help">Swipe to explore<button type="button" class="ctl" data-diagram-scroll="-1" aria-label="Scroll workflow left">←</button><button type="button" class="ctl" data-diagram-scroll="1" aria-label="Scroll workflow right">→</button></span></figcaption>
             </figure>
             <div class="outcomes reveal">
               ${project.outcomes.map((outcome) => `<div><strong class="display-num">${escapeHtml(outcome.value)}</strong><span>${escapeHtml(outcome.label)}</span></div>`).join("")}
