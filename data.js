@@ -11,7 +11,7 @@ export const profile = {
     "Seven years of shipping web, desktop, and internal products: real-time restaurant systems, QA automation, business software, and AI-assisted developer tooling. Comfortable anywhere between the interface, the backend, and the operational mess in between.",
   email: "ebrar.dushullovci@gmail.com",
   github: "https://github.com/ebrardushullovcii",
-  linkedin: "https://www.linkedin.com/in/ebrar-dushullovci-5b98b420b/",
+  linkedin: "https://www.linkedin.com/in/ebrar-dushullovci/",
   resume: "/assets/resume/Ebrar-Dushullovci-Resume.pdf",
   location: "Prishtina, Kosovo",
   timezone: "CET (UTC+1)",
